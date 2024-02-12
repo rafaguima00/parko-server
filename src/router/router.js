@@ -48,7 +48,7 @@ router.post("/users/login", controlUsers.loginUsers);
 
 //Dívidas
 router.get("/debts", controlDebts.getDebts);
-router.get("/debts/:id"); //Pendente
+router.get("/debts/:id", controlDebts.getSelectedDebt);
 router.post("/debts", controlDebts.postDebts);
 router.delete("/debts/:id", controlDebts.deleteDebts);
 router.put("/debts/:id", controlDebts.putDebts);

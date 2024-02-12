@@ -10,4 +10,4 @@ app.use(express.json());
 app.use(router);
 app.use(cors());
 
-app.listen(PORT, () => console.log(`Servidor da Parko rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`Parko server running at ${PORT} port...`));
