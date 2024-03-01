@@ -5,6 +5,12 @@ const getEstablishments = async (req, res) => {
     res.status(200).json(getEstablishment);
 }
 
+const getEstablishmentById = async (req, res) => {
+    const id = req.params.id;
+    const getById = await model.getEstablishmentById(id);
+    res.status(200).json(getById);
+}
+
 const getColaboratorsByEst = async (req, res) => {
     const id = req.params.id;
     const getAll = await model.getEstByColaborator(id);
@@ -24,12 +30,13 @@ const deleteEstablishment = async (req, res) => {
 
 const updateEstablishment = async (req, res) => {
     const id = req.params.id;
-    await model.putEstablishment(id, req.body);
+    await model.patchEstablishment(id, req.body);
     res.status(204).json({});
 }
 
 module.exports = {
     getEstablishments,
+    getEstablishmentById,
     getColaboratorsByEst,
     createEstablishment,
     deleteEstablishment,

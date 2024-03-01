@@ -1,10 +1,10 @@
 const model = require("../../model/colaborators");
 
 const validateBody = async (req, res, next) => {
-    const { name, email, cpf, rg, tel, data_nasc, inicio_contrato } = req.body;
+    const { colaborator, email, cpf, rg, tel, data_nasc, inicio_contrato } = req.body;
     
     if(
-        name === "" ||
+        colaborator === "" ||
         email === "" ||
         cpf === "" ||
         rg === "" ||
@@ -16,7 +16,7 @@ const validateBody = async (req, res, next) => {
     }
 
     if(
-        name === undefined ||
+        colaborator === undefined ||
         email === undefined ||
         cpf === undefined ||
         rg === undefined ||
@@ -32,34 +32,36 @@ const validateBody = async (req, res, next) => {
     const emailExists = getAll.find(item => item.email == email);
     const cpfExists = getAll.find(item => item.cpf == cpf);
 
-    if(emailExists) return res.status(400).json({ message: "This email is already in use" });
+    if(emailExists) return res.status(400).json({ 
+        message: "Este e-mail já está em uso" 
+    });
 
-    if(cpfExists) return res.status(400).json({ message: "This CPF is already in use" });
+    if(cpfExists) return res.status(400).json({ 
+        message: "Este CPF já está em uso" 
+    });
 
     next();
 }
 
 const validateRequestPut = async (req, res, next) => {
-    const { name, email, tel, e_admin, tipo_contratacao, unidade } = req.body;
+    const { colaborator, email, tel, e_admin, tipo_contratacao } = req.body;
 
     if(
-        name === "" ||
+        colaborator === "" ||
         email === "" || 
         tel === "" ||
         e_admin === "" || 
-        tipo_contratacao === "" || 
-        unidade === ""  
+        tipo_contratacao === "" 
     ) {
         return res.status(400).json({ message: "The field cannot be empty" })
     }
 
     if(
-        name === undefined ||
+        colaborator === undefined ||
         email === undefined || 
         tel === undefined ||
         e_admin === undefined || 
-        tipo_contratacao === undefined || 
-        unidade === undefined 
+        tipo_contratacao === undefined 
     ) {
         return res.status(400).json({ message: "The field is required" })
     }
@@ -68,7 +70,7 @@ const validateRequestPut = async (req, res, next) => {
     const validateBody = await model.getColab();
     const emailExists = validateBody.find(item => item.email == email);
 
-    if(emailExists) return res.status(400).json({ message: "This email is already in use" });
+    if(emailExists) return res.status(400).json({ message: "Este e-mail já está em uso" });
 
     next();
 }

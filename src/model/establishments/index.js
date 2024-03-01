@@ -6,27 +6,9 @@ const getEstablishment = async () => {
     return items;
 }
 
-//Recuperar dados de colaboradores que trabalham em determinado estabelecimento
-const getEstByColaborator = async (id) => {
-    const query = `
-        SELECT 
-            c.id,
-            c.name as colaborator, 
-            c.email, 
-            c.data_nasc, 
-            c.created_at,
-            c.updated_at,  
-            c.inicio_contrato, 
-            t.type_colaborator,
-            h.type as tipo_contratacao,
-            e.razao_social, 
-            e.name
-        FROM colaborators c
-        INNER JOIN establishments e ON e.id = c.unidade
-        INNER JOIN type_colaborators t ON t.id = c.e_admin
-        INNER JOIN type_hiring h ON h.id = c.tipo_contratacao
-        WHERE e.id = ?;
-    `;
+const getEstablishmentById = async (id) => {
+    const query = "SELECT * FROM establishments WHERE id = ?"
+
     const [items] = await connection.execute(query, [id]);
     return items;
 }
@@ -104,21 +86,22 @@ const deleteEstablishment = async (id) => {
     await connection.execute(query, [id]);
 }
 
-const putEstablishment = async (id, body) => {
+const patchEstablishment = async (id, body) => {
     const updatedAt = new Date().toLocaleString();
 
     const { 
         razao_social, 
         name, 
         contato, 
+        email,
+        cnpj,
+        inscricao_estadual,
+        inscricao_municipal,
         end, 
         cep, 
         estado, 
         cidade, 
-        bairro, 
-        tempo_tolerancia, 
-        valor_hora, 
-        valor_fracao_hora 
+        bairro,
     } = body;
 
     const query = `
@@ -127,14 +110,15 @@ const putEstablishment = async (id, body) => {
             razao_social = ?, 
             name = ?, 
             contato = ?,
+            email = ?,
+            cnpj = ?,
+            inscricao_estadual = ?,
+            inscricao_municipal = ?,
             end = ?,
             cep = ?,
             estado = ?,
             cidade = ?,
             bairro = ?,
-            tempo_tolerancia = ?,
-            valor_hora = ?,
-            valor_fracao_hora = ?,
             updated_at = ?
         WHERE id = ?
     `;
@@ -143,14 +127,15 @@ const putEstablishment = async (id, body) => {
         razao_social, 
         name, 
         contato, 
+        email,
+        cnpj,
+        inscricao_estadual,
+        inscricao_municipal,
         end, 
         cep, 
         estado, 
         cidade, 
         bairro, 
-        tempo_tolerancia, 
-        valor_hora, 
-        valor_fracao_hora,
         updatedAt,
         id
     ];
@@ -158,10 +143,12 @@ const putEstablishment = async (id, body) => {
     await connection.execute(query, values);
 }
 
+//Atualizar tempo de tolerância [pendente]...
+
 module.exports = {
     getEstablishment,
-    getEstByColaborator,
+    getEstablishmentById,
     postEstablishment, 
     deleteEstablishment, 
-    putEstablishment
+    patchEstablishment
 }

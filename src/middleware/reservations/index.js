@@ -23,6 +23,23 @@ const validateBody = (req, res, next) => {
     next();
 }
 
+const validatePutRequest = (req, res, next) => {
+
+    if(req.body.status === "Recusado") {
+        const gerarNumero = () => {
+            const number1 = Math.floor(Math.random()*9000) + 1000;
+            return number1.toString();
+        }
+    
+        const func = gerarNumero();
+    
+        console.log(func);
+    }
+
+    next();
+}
+
 module.exports = {
-    validateBody
+    validateBody,
+    validatePutRequest
 };

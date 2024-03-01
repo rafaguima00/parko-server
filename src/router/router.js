@@ -17,6 +17,7 @@ const middleUsers = require("../middleware/users");
 
 //Colaboradores
 router.get("/colaborators", controlColab.getColaborators);
+router.get("/colaborators/:id", controlColab.getColaboratorsById);
 router.post("/colaborators", middleColab.validateBody, controlColab.postColaborators);
 router.delete("/colaborators/:id", controlColab.deleteColaborators);
 router.put("/colaborators/:id", middleColab.validateRequestPut, controlColab.updateColaborators);
@@ -24,15 +25,17 @@ router.put("/colaborators/:id", middleColab.validateRequestPut, controlColab.upd
 //login dos colaboradores
 router.post("/colaborators/login", controlColab.loginColaborators);
 
-//estabelecimentos
+//estacionamentos
 router.get("/establishments", controlEstab.getEstablishments);
-router.get("/establishments/colaborators/:id", controlEstab.getColaboratorsByEst);
+router.get("/establishments/:id", controlEstab.getEstablishmentById);
 router.post("/establishments", controlEstab.createEstablishment);
 router.delete("/establishments/:id", controlEstab.deleteEstablishment);
-router.put("/establishments/:id", controlEstab.updateEstablishment);
+router.patch("/establishments/:id", controlEstab.updateEstablishment);
 
 //reservas
 router.get("/reservations", controlReserv.getReservations);
+router.get("/reservations/:id", controlReserv.getReservationById);
+router.get("/reservations/parking/:id", controlReserv.getReservByParkingId);
 router.post("/reservations", middleReserv.validateBody, controlReserv.postReservations);
 router.delete("/reservations/:id", controlReserv.deleteReservation);
 router.put("/reservations/:id", controlReserv.updateReservation);
