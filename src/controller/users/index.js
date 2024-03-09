@@ -9,9 +9,18 @@ const getUsers = async (req, res) => {
 }
 
 const postUsers = async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const createUser = await model.postUsers(req.body, hashedPassword);
-    res.status(201).json(createUser);
+    if(req.body.password === "") {
+        const randomPassword = Math.floor(Math.random()*900000) + 100000;
+        const hashedPassword = await bcrypt.hash(randomPassword.toString(), 10);
+        const create = await model.postUsers(req.body, hashedPassword);
+        
+        res.status(201).json(create);
+    } else {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const createUser = await model.postUsers(req.body, hashedPassword);
+
+        res.status(201).json(createUser);
+    }
 }
 
 const deleteUsers = async (req, res) => {

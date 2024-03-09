@@ -4,14 +4,14 @@ const getEstablishment = async () => {
     const query = "SELECT * FROM establishments";
     const [items] = await connection.execute(query);
     return items;
-}
+};
 
 const getEstablishmentById = async (id) => {
     const query = "SELECT * FROM establishments WHERE id = ?"
 
     const [items] = await connection.execute(query, [id]);
     return items;
-}
+};
 
 const postEstablishment = async (body) => {
 
@@ -79,12 +79,12 @@ const postEstablishment = async (body) => {
     ];
 
     await connection.execute(query, values);
-}
+};
 
 const deleteEstablishment = async (id) => {
     const query = "DELETE FROM establishments WHERE id = ?";
     await connection.execute(query, [id]);
-}
+};
 
 const patchEstablishment = async (id, body) => {
     const updatedAt = new Date().toLocaleString();
@@ -141,14 +141,31 @@ const patchEstablishment = async (id, body) => {
     ];
 
     await connection.execute(query, values);
-}
+};
 
-//Atualizar tempo de tolerância [pendente]...
+const patchPriceTable = async (id, body) => {
+    const { tempo_tolerancia, valor_hora, valor_fracao_hora } = body;
+
+    const updatedAt = new Date().toLocaleString();
+    const query = `
+        UPDATE establishments 
+        SET 
+            tempo_tolerancia = ?,
+            valor_hora = ?,
+            valor_fracao_hora = ?,
+            updated_at = ?
+        WHERE id = ?
+    `;
+    const values = [tempo_tolerancia, valor_hora, valor_fracao_hora, updatedAt, id];
+
+    await connection.execute(query, values);
+};
 
 module.exports = {
     getEstablishment,
     getEstablishmentById,
     postEstablishment, 
     deleteEstablishment, 
-    patchEstablishment
+    patchEstablishment,
+    patchPriceTable
 }

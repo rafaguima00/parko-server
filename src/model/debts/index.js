@@ -5,7 +5,9 @@ const getDebts = async () => {
         SELECT 
             d.id,
             d.value,
+            u.id as id_costumer,
             u.name as costumer,
+            id_establishment,
             e.name as establishment,
             s.status
         FROM debts d
@@ -23,7 +25,9 @@ const getDebtsByOwnerId = async (id) => {
         SELECT 
             d.id,
             d.value,
+            u.id as id_costumer,
             u.name as costumer,
+            id_establishment,
             e.name as establishment,
             s.status
         FROM debts d

@@ -33,8 +33,8 @@ const getVehiclesByOwnerId = async (id) => {
     return items;
 }
 
-const createVehicle = async (vehicle) => {
-    const { id_costumer, name, color, license_plate } = vehicle;
+const createVehicle = async (vehicle, id_costumer) => {
+    const { name_vehicle, color, license_plate } = vehicle;
 
     const query = `
         INSERT INTO vehicles(
@@ -48,7 +48,7 @@ const createVehicle = async (vehicle) => {
             ?, ?, ?, ?
         );
     `;
-    const values = [id_costumer, name, color, license_plate];
+    const values = [id_costumer, name_vehicle, color, license_plate];
     
     await connection.execute(query, values);
 }

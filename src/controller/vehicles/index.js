@@ -11,7 +11,7 @@ const getVehiclesByOwnerId = async (req, res) => {
 }
 
 const postVehicles = async (req, res) => {
-    const create = await model.createVehicle(req.body);
+    const create = await model.createVehicle(req.body, req.body.id_costumer);
     res.status(201).json(create);
 }
 
