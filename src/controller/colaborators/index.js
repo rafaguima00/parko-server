@@ -47,8 +47,8 @@ const deleteColaborators = async (req, res) => {
 
 const updateColaborators = async (req, res) => {
     const id = req.params.id;
-
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    
     await model.putColab(id, req.body, hashedPassword)
     return res.status(204).json({});
 }

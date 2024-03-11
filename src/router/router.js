@@ -11,6 +11,7 @@ const controllers = {
     users: require("../controller/users"),
     debts: require("../controller/debts"),
     vehicles: require("../controller/vehicles"),
+    ratings: require("../controller/ratings"),
     accounts: require("../controller/accounts"),
     heritage: require("../controller/heritage"),
     occurrence: require("../controller/occurrence"),
@@ -83,6 +84,11 @@ const routes = [
     { path: "/vehicles/:id", method: "get", handler: controllers.vehicles.getVehiclesByOwnerId },
     { path: "/vehicles", method: "post", handler: controllers.vehicles.postVehicles },
     { path: "/vehicles/:id", method: "delete", handler: controllers.vehicles.deleteVehicle },
+
+    { path: "/ratings", method: "get", handler: controllers.ratings.getRatings },
+    { path: "/ratings", method: "post", handler: controllers.ratings.postRatings },
+    { path: "/ratings/:id", method: "delete", handler: controllers.ratings.deleteRatings },
+    { path: "/ratings/:id", method: "put", handler: controllers.ratings.putRatings },
 
     // Registro de Contas
     { path: "/accounts", method: "get", handler: controllers.accounts.getAccounts },

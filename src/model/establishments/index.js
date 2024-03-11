@@ -1,7 +1,7 @@
 const connection = require("../model");
 
 const getEstablishment = async () => {
-    const query = "SELECT * FROM establishments";
+    const query = "SELECT e.* FROM establishments e";
     const [items] = await connection.execute(query);
     return items;
 };
@@ -28,10 +28,7 @@ const postEstablishment = async (body) => {
         cidade, 
         bairro,
         longitude, 
-        latitude,
-        tempo_tolerancia,
-        valor_hora, 
-        valor_fracao_hora
+        latitude
     } = body;
 
     const query = `
@@ -49,10 +46,7 @@ const postEstablishment = async (body) => {
             cidade, 
             bairro, 
             longitude, 
-            latitude,
-            tempo_tolerancia,
-            valor_hora, 
-            valor_fracao_hora
+            latitude
         ) VALUES (
             (SELECT MAX(e.id) from establishments e)+1,
             ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
@@ -72,10 +66,7 @@ const postEstablishment = async (body) => {
         cidade, 
         bairro,
         longitude, 
-        latitude,
-        tempo_tolerancia,
-        valor_hora, 
-        valor_fracao_hora
+        latitude
     ];
 
     await connection.execute(query, values);
@@ -143,29 +134,10 @@ const patchEstablishment = async (id, body) => {
     await connection.execute(query, values);
 };
 
-const patchPriceTable = async (id, body) => {
-    const { tempo_tolerancia, valor_hora, valor_fracao_hora } = body;
-
-    const updatedAt = new Date().toLocaleString();
-    const query = `
-        UPDATE establishments 
-        SET 
-            tempo_tolerancia = ?,
-            valor_hora = ?,
-            valor_fracao_hora = ?,
-            updated_at = ?
-        WHERE id = ?
-    `;
-    const values = [tempo_tolerancia, valor_hora, valor_fracao_hora, updatedAt, id];
-
-    await connection.execute(query, values);
-};
-
 module.exports = {
     getEstablishment,
     getEstablishmentById,
     postEstablishment, 
     deleteEstablishment, 
-    patchEstablishment,
-    patchPriceTable
+    patchEstablishment
 }

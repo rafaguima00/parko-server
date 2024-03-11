@@ -66,12 +66,6 @@ const validateRequestPut = async (req, res, next) => {
         return res.status(400).json({ message: "The field is required" })
     }
 
-    //verificar se existe um usuário com e-mail 
-    const validateBody = await model.getColab();
-    const emailExists = validateBody.find(item => item.email == email);
-
-    if(emailExists) return res.status(400).json({ message: "Este e-mail já está em uso" });
-
     next();
 }
 

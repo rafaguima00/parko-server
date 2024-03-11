@@ -50,7 +50,21 @@ const updatePriceTable = async (body, idEstacionamento) => {
     `;
     const values = [tempo_tolerancia, valor_hora, valor_fracao_hora, idEstacionamento];
 
-    await connection.execute(query, values);
+    const update = await connection.execute(query, values);
+
+    if(update) {
+        const updatedAt = new Date().toLocaleString();
+
+        const query = `
+            UPDATE establishments
+            SET 
+                updated_at = ?
+            WHERE id = ?
+        `;
+        const values = [updatedAt, idEstacionamento];
+
+        await connection.execute(query, values);
+    }
 };
 
 const deletePriceTable = async (id) => {
