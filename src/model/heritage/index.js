@@ -20,7 +20,6 @@ const createHeritage = async (body) => {
 
     const query = `
         INSERT INTO heritage(
-            id,
             code,
             name,
             category,
@@ -30,7 +29,6 @@ const createHeritage = async (body) => {
             value, 
             id_establishment
         ) VALUES (
-            (SELECT MAX(h.id) FROM heritage h)+1,
             ?,?,?,?,?,?,?,?
         );
     `;

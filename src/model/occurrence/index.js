@@ -4,9 +4,10 @@ const getOccurrence = async () => {
     const query = `
         SELECT 
             o.id,
+            o.cod,
             o.local,
             o.data,
-            o.numero_comanda,
+            o.numero_comanda as num_comanda,
             o.nome_cliente,
             o.veiculo,
             o.placa_veiculo,
@@ -52,9 +53,31 @@ const createOccurrence = async (body) => {
         id_establishment
     } = body;
 
-    const query = `
-        INSERT INTO occurrence (
-            id,
+    if(id_occurrence == 1) {
+        const query = `
+            INSERT INTO occurrence (
+                id,
+                local,
+                data,
+                numero_comanda,
+                nome_cliente,
+                veiculo,
+                placa_veiculo,
+                cor_veiculo,
+                num_doc,
+                renavam,
+                data_entrada, 
+                hora_entrada,
+                value,
+                desc_item,
+                id_occurrence,
+                id_establishment
+            ) VALUES (
+                (SELECT MAX(o.id) FROM occurrence o)+1,
+                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+            );
+        `;
+        const values = [
             local,
             data,
             numero_comanda,
@@ -68,37 +91,69 @@ const createOccurrence = async (body) => {
             hora_entrada,
             value,
             desc_item,
-            bem_furtado,
-            num_bo,
             id_occurrence,
             id_establishment
-        ) VALUES (
-            (SELECT MAX(o.id) FROM occurrence o)+1,
-            ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?
-        );
-    `;
+        ];
 
-    const values = [
-        local,
-        data,
-        numero_comanda,
-        nome_cliente,
-        veiculo,
-        placa_veiculo,
-        cor_veiculo,
-        num_doc,
-        renavam,
-        data_entrada, 
-        hora_entrada,
-        value,
-        desc_item,
-        bem_furtado,
-        num_bo,
-        id_occurrence,
-        id_establishment
-    ];
+        await connection.execute(query, values);
+        
+    } else if(id_occurrence == 2) {
+        const query = `
+            INSERT INTO occurrence (
+                id,
+                nome_cliente,
+                veiculo,
+                bem_furtado,
+                data,
+                local,
+                num_bo,
+                numero_comanda,
+                id_occurrence,
+                id_establishment	
+            ) VALUES (
+                (SELECT MAX(o.id) FROM occurrence o)+1,
+                ?,?,?,?,?,?,?,?,?
+            );
+        `;
+        const values = [
+            nome_cliente,
+            veiculo,
+            bem_furtado,
+            data,
+            local,
+            num_bo,
+            numero_comanda,
+            id_occurrence,
+            id_establishment
+        ];
 
-    await connection.execute(query, values);
+        await connection.execute(query, values);
+    } else if(id_occurrence == 3) {
+        const query = `
+            INSERT INTO occurrence (
+                id,
+                bem_furtado,
+                data,
+                local,
+                numero_comanda,
+                id_occurrence,
+                id_establishment	
+            ) VALUES (
+                (SELECT MAX(o.id) FROM occurrence o)+1,
+                ?,?,?,?,?,?
+            );
+        `;
+        const values = [
+            bem_furtado,
+            data,
+            local,
+            numero_comanda,
+            id_occurrence,
+            id_establishment
+        ];
+
+        await connection.execute(query, values);
+    }
 }
 
 const updateOccurrence = async (body, id) => {
@@ -126,7 +181,6 @@ const updateOccurrence = async (body, id) => {
             id_occurrence = ?
         WHERE id = ?;
     `;
-
     const values = [
         local,
         data,
@@ -137,9 +191,9 @@ const updateOccurrence = async (body, id) => {
         num_bo,
         id_occurrence,
         id
-    ]
+    ];
 
-    await connection.execute(query, values)
+    await connection.execute(query, values);
 }
 
 const deleteOccurrence = async (id) => {

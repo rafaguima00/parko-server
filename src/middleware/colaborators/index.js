@@ -12,7 +12,7 @@ const validateBody = async (req, res, next) => {
         data_nasc === "" ||
         inicio_contrato === ""
     ) {
-        return res.status(400).json({ message: "The field cannot be empty" });
+        return res.status(400).json({ message: "O campo de texto não pode estar vazio" });
     }
 
     if(
@@ -24,7 +24,7 @@ const validateBody = async (req, res, next) => {
         data_nasc === undefined ||
         inicio_contrato === undefined
     ) {
-        return res.status(400).json({ message: "The field is required" });
+        return res.status(400).json({ message: "Campo de texto obrigatório" });
     }
 
     //verificar se já existe o email e cpf cadastrado
@@ -53,7 +53,7 @@ const validateRequestPut = async (req, res, next) => {
         e_admin === "" || 
         tipo_contratacao === "" 
     ) {
-        return res.status(400).json({ message: "The field cannot be empty" })
+        return res.status(400).json({ message: "O campo de texto não pode estar vazio" });
     }
 
     if(
@@ -63,7 +63,7 @@ const validateRequestPut = async (req, res, next) => {
         e_admin === undefined || 
         tipo_contratacao === undefined 
     ) {
-        return res.status(400).json({ message: "The field is required" })
+        return res.status(400).json({ message: "Campo de texto obrigatório" });
     }
 
     next();

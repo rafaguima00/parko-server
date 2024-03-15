@@ -94,8 +94,8 @@ const deleteColab = async (id) => {
 
 const putColab = async (id, body, hashedPassword) => {
     const { colaborator, email, tel, e_admin, tipo_contratacao } = body;
-    const updatedAt = new Date().toLocaleString();
 
+    const updatedAt = new Date().toLocaleString();
     const query = `
         UPDATE colaborators 
         SET 
@@ -129,7 +129,7 @@ const loginColaborators = async (login) => {
                 email, password
             ) VALUES (? , ?)
         `
-        const values = [email, password]
+        const values = [email, password];
         
         await connection.execute(query, values);
     }
