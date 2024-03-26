@@ -56,7 +56,6 @@ const createOccurrence = async (body) => {
     if(id_occurrence == 1) {
         const query = `
             INSERT INTO occurrence (
-                id,
                 local,
                 data,
                 numero_comanda,
@@ -73,7 +72,6 @@ const createOccurrence = async (body) => {
                 id_occurrence,
                 id_establishment
             ) VALUES (
-                (SELECT MAX(o.id) FROM occurrence o)+1,
                 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
             );
         `;
@@ -100,7 +98,6 @@ const createOccurrence = async (body) => {
     } else if(id_occurrence == 2) {
         const query = `
             INSERT INTO occurrence (
-                id,
                 nome_cliente,
                 veiculo,
                 bem_furtado,
@@ -111,7 +108,6 @@ const createOccurrence = async (body) => {
                 id_occurrence,
                 id_establishment	
             ) VALUES (
-                (SELECT MAX(o.id) FROM occurrence o)+1,
                 ?,?,?,?,?,?,?,?,?
             );
         `;
@@ -131,7 +127,6 @@ const createOccurrence = async (body) => {
     } else if(id_occurrence == 3) {
         const query = `
             INSERT INTO occurrence (
-                id,
                 bem_furtado,
                 data,
                 local,
@@ -139,7 +134,6 @@ const createOccurrence = async (body) => {
                 id_occurrence,
                 id_establishment	
             ) VALUES (
-                (SELECT MAX(o.id) FROM occurrence o)+1,
                 ?,?,?,?,?,?
             );
         `;

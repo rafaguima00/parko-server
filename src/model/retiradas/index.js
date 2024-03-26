@@ -20,14 +20,12 @@ const postRetiradas = async (body) => {
 
     const query = `
         INSERT INTO retiradas(
-            id,
             id_establishment,
             id_colaborator,
             value,
             created_at,
             description
         ) VALUES (
-            (SELECT MAX(a.id) FROM retiradas a)+1,
             ?, ?, ?, ?, ?
         );
     `;

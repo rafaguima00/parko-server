@@ -22,13 +22,11 @@ const createPriceTable = async (body) => {
     const { id_estacionamento, tempo_tolerancia, valor_hora, valor_fracao_hora } = body;
     const query = `
         INSERT INTO price_table (
-            id,
             id_estacionamento,
             tempo_tolerancia,
             valor_hora, 
             valor_fracao_hora
         ) VALUES (
-            (SELECT MAX(p.id) FROM price_table p)+1,
             ?, ?, ?, ?
         );
     `;

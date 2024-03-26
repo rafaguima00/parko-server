@@ -42,12 +42,11 @@ const postOpeningHour = async (body) => {
     
         const query = `
             INSERT INTO opening_hour(
-                id,
                 id_estacionamento,
                 dia_semana, 
                 hora_abertura, 
                 hora_fechamento
-            ) VALUES ((SELECT MAX(o.id) FROM opening_hour o)+1, ?, ?, ?, ?);
+            ) VALUES (?, ?, ?, ?);
         `;
         const values = [id_estacionamento, dia_semana, hora_abertura, hora_fechamento];
     

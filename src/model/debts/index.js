@@ -45,13 +45,11 @@ const createDebt = async (debt) => {
 
     const query = `
         INSERT INTO debts(
-            id, 
             value, 
             id_costumer, 
             id_establishment, 
             status
         ) VALUES (
-            (SELECT MAX(d.id) FROM debts d)+1, 
             ?, ?, ?, 1
         )
     `;

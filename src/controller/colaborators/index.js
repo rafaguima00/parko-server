@@ -1,5 +1,7 @@
+require("dotenv").config();
 const model = require("../../model/colaborators");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const getColaborators = async (req, res) => {
     const result = await model.getColab();
@@ -29,8 +31,9 @@ const loginColaborators = async (req, res) => {
         
     try {
         if (await bcrypt.compare(req.body.password, userLogin.password)) {
-            await model.loginColaborators(req.body);
-            res.status(201).json(userLogin);
+            const token = jwt.sign({ user: userLogin }, process.env.PRIVATE_KEY, { expiresIn: 1800 });
+
+            res.status(201).json({ token });
         } else {
             res.status(400).json({ message: "E-mail or password is wrong" })
         }

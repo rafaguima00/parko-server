@@ -21,7 +21,6 @@ const createAccount = async (accounts) => {
 
     const query = `
         INSERT INTO accounts(
-            id,
             category, 
             desc_item,
             value, 
@@ -31,7 +30,7 @@ const createAccount = async (accounts) => {
             cost, 
             id_establishment
         ) VALUES (
-            (SELECT MAX(a.id) FROM accounts a)+1,?,?,?,?,?,?,?,?
+            ?,?,?,?,?,?,?,?
         );
     `;
 

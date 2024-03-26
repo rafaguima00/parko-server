@@ -62,7 +62,6 @@ const postColab = async (body, hashedPassword) => {
 
     const query = `
         INSERT INTO colaborators(
-            id, 
             name, 
             email, 
             password,
@@ -76,7 +75,6 @@ const postColab = async (body, hashedPassword) => {
             tipo_contratacao,
             unidade
         ) VALUES (
-            (SELECT MAX(c.id) FROM colaborators c)+1, 
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         );
     `;
@@ -113,33 +111,10 @@ const putColab = async (id, body, hashedPassword) => {
     await connection.execute(query, values);
 }
 
-const loginColaborators = async (login) => {
-    const { email, password } = login;
-
-    const query = `
-        SELECT * FROM colaborators WHERE email = ? AND password = ?;
-    `;
-    const values = [email, password];
-
-    await connection.execute(query, values);
-    
-    if(query) {
-        const query = `
-            INSERT INTO login_colaborators(
-                email, password
-            ) VALUES (? , ?)
-        `
-        const values = [email, password];
-        
-        await connection.execute(query, values);
-    }
-}
-
 module.exports = {
     getColab,
     getColaboratorById,
     postColab,
     deleteColab,
-    putColab,
-    loginColaborators
+    putColab
 }

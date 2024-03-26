@@ -107,7 +107,6 @@ const postReservation = async (body) => {
 
     const query = `
         INSERT INTO reservations (
-            id, 
             data_reserva, 
             hora_reserva,
             data_entrada,
@@ -120,7 +119,6 @@ const postReservation = async (body) => {
             id_vehicle,
             id_establishment
         ) VALUES(
-            (SELECT MAX(r.id) FROM reservations r)+1, 
             ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?
         );
     `;
