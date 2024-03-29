@@ -11,6 +11,7 @@ const getReservation = async () => {
             r.data_saida, 
             r.hora_saida,
             r.value,
+            r.parko_app,
             u.id as id_costumer,
             u.name,
             u.email, 
@@ -30,7 +31,7 @@ const getReservation = async () => {
     `;
     const [items] = await connection.execute(query);
     return items;
-}
+};
 
 const getReservationById = async (id) => {
     const query = `
@@ -43,6 +44,7 @@ const getReservationById = async (id) => {
             r.data_saida, 
             r.hora_saida,
             r.value,
+            r.parko_app,
             u.id as id_costumer,
             u.name,
             u.email, 
@@ -63,7 +65,7 @@ const getReservationById = async (id) => {
     `;
     const [items] = await connection.execute(query, [id]);
     return items;
-}
+};
 
 const getReservByParkingId = async (id) => {
     const query = `
@@ -76,6 +78,7 @@ const getReservByParkingId = async (id) => {
             r.data_saida, 
             r.hora_saida,
             r.value,
+            r.parko_app,
             u.id as id_costumer,
             u.name,
             u.email, 
@@ -96,7 +99,7 @@ const getReservByParkingId = async (id) => {
     `;
     const [items] = await connection.execute(query, [id]);
     return items;
-}
+};
 
 const postReservation = async (body) => {
     
@@ -126,11 +129,11 @@ const postReservation = async (body) => {
     const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, id_vehicle, id_establishment];
 
     await connection.execute(query, values);
-}
+};
 
 const deleteReservation = async (id) => {
     await connection.execute("DELETE FROM reservations WHERE id = ?;", [id]);
-}
+};
 
 const putReservation = async (body, id) => {
 
@@ -151,7 +154,7 @@ const putReservation = async (body, id) => {
     const values = [data_entrada, hora_entrada, data_saida, hora_saida, value, status, id_vehicle, id];
 
     await connection.execute(query, values);
-}
+};
 
 module.exports = {
     getReservation, 
@@ -160,4 +163,4 @@ module.exports = {
     postReservation, 
     deleteReservation, 
     putReservation
-}
+};
