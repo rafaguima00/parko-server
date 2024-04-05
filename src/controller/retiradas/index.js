@@ -9,9 +9,12 @@ const getRetiradas = async (req, res) => {
 };
 
 const postRetiradas = async (req, res) => {
-    const create = await model.retiradas.postRetiradas(req.body);
-
-    res.status(201).json(create);
+    try {
+        const create = await model.retiradas.postRetiradas(req.body);
+        res.status(201).json(create);
+    } catch (error) {
+        res.status(500).json(error)
+    }
 };
 
 const deleteRetiradas = async (req, res) => {

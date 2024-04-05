@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 
 //controllers
 const controllers = {
@@ -17,14 +17,14 @@ const controllers = {
     occurrence: require("../controller/occurrence"),
     aportes: require("../controller/aportes"),
     retiradas: require("../controller/retiradas")
-};
+}
 
 //middlewares
 const middlewares = {
     colab: require("../middleware/colaborators"),
     reserv: require("../middleware/reservations"),
     users: require("../middleware/users")
-};
+}
 
 //Definir rotas
 const routes = [
@@ -117,14 +117,14 @@ const routes = [
     { path: "/retiradas", method: "get", handler: controllers.retiradas.getRetiradas },
     { path: "/retiradas", method: "post", handler: controllers.retiradas.postRetiradas },
     { path: "/retiradas/:id", method: "delete", handler: controllers.retiradas.deleteRetiradas }
-];
+]
 
 routes.forEach(route => {
     if(route.middleware) {
-        router[route.method](route.path, route.middleware, route.handler);
+        router[route.method](route.path, route.middleware, route.handler)
     } else {
-        router[route.method](route.path, route.handler);
+        router[route.method](route.path, route.handler)
     }
-});
+})
 
-module.exports = router;
+module.exports = router
