@@ -37,8 +37,8 @@ const loginColaborators = async (req, res) => {
         } else {
             res.status(400).json({ message: "E-mail or password is wrong" })
         }
-    } catch {
-        res.status(400).json({ message: "E-mail or password is wrong" })
+    } catch (error) {
+        res.status(401).json(error)
     }
 };
 
