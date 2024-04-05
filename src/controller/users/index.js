@@ -43,20 +43,21 @@ const loginUsers = async (req, res) => {
     const allUsers = await model.getUsers()
     const findUser = allUsers.find(item => item.email.toLowerCase() === email)
 
-    if(findUser === null) {
-        return res.status(400).json({ message: "Coudn't find any user" })
-    }
-
     try {
+        if(!findUser) {
+            return res.status(401).json({ message: "Coudn't find any user" })
+        }
+
         if(await bcrypt.compare(req.body.password, findUser.password)) {
             const token = jwt.sign({ user: findUser }, process.env.PRIVATE_KEY, { expiresIn: 1800 })
     
             res.status(201).json({ token })
         } else {
-            return res.status(400).json({ message: "Email or password invalid" })
+            return res.status(401).json({ message: "Email or password invalid" })
         }
-    } catch {
-        return res.status(400).json({ message: "Email or password invalid" })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: "Internal server error" })
     }
 }
 
