@@ -21,25 +21,30 @@ const postColaborators = async (req, res) => {
 }
 
 const loginColaborators = async (req, res) => {
-    const email = req.body.email.toLowerCase()
-    const users = await model.getColab()
-    const userLogin = users.find(item => item.email.toLowerCase() === email)
-        
-    try {
-        if (!userLogin) {
-            return res.status(401).json({ message: "User not found" })
-        }
+    if((req.body.email === "" || req.body.password === "") || (req.body.email === "" && req.body.password === "")) {
+        return res.status(401).json({ message: "The field cannot be empty" })
+    } else {
+        const email = req.body.email.toLowerCase()
+        const users = await model.getColab()
+        const userLogin = users.find(item => item.email.toLowerCase() === email)
+            
+        try {
 
-        if (await bcrypt.compare(req.body.password, userLogin.password)) {
-            const token = jwt.sign({ user: userLogin }, process.env.PRIVATE_KEY, { expiresIn: 1800 })
+            if (!userLogin) {
+                return res.status(401).json({ message: "E-mail or password is wrong" })
+            }
 
-            res.status(201).json({ token })
-        } else {
-            res.status(401).json({ message: "E-mail or password is wrong" })
+            if (await bcrypt.compare(req.body.password, userLogin.password)) {
+                const token = jwt.sign({ user: userLogin }, process.env.PRIVATE_KEY, { expiresIn: 1800 })
+
+                res.status(201).json({ token })
+            } else {
+                res.status(401).json({ message: "E-mail or password is wrong" })
+            }
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({ message: "Internal server error" })
         }
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ message: "Internal server error" })
     }
 }
 

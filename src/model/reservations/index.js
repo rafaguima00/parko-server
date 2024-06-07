@@ -22,7 +22,8 @@ const getReservation = async () => {
             v.color,
             v.license_plate,
             r.id_establishment,
-            e.name as establishment
+            e.name as establishment,
+            e.image as image_url_establishment
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -55,7 +56,8 @@ const getReservationById = async (id) => {
             v.color,
             v.license_plate,
             r.id_establishment,
-            e.name as establishment
+            e.name as establishment,
+            e.image as image_url_establishment
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -89,7 +91,8 @@ const getReservByParkingId = async (id) => {
             v.color,
             v.license_plate,
             r.id_establishment,
-            e.name as establishment
+            e.name as establishment,
+            e.image as image_url_establishment
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -106,7 +109,17 @@ const postReservation = async (body) => {
     const hora = new Date().toLocaleTimeString();
     const dia = new Date().toLocaleDateString();
 
-    const { data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, id_vehicle, id_establishment } = body;
+    const { 
+        data_entrada, 
+        hora_entrada, 
+        data_saida, 
+        hora_saida, 
+        value, 
+        id_costumer, 
+        id_vehicle, 
+        id_establishment, 
+        parko_app 
+    } = body;
 
     const query = `
         INSERT INTO reservations (
@@ -120,13 +133,14 @@ const postReservation = async (body) => {
             id_costumer,
             status_reservation,
             id_vehicle,
-            id_establishment
+            id_establishment,
+            parko_app
         ) VALUES(
-            ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?
         );
     `;
 
-    const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, id_vehicle, id_establishment];
+    const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, id_vehicle, id_establishment, parko_app];
 
     await connection.execute(query, values);
 };
