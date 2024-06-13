@@ -32,9 +32,9 @@ const deleteUsers = async (req, res) => {
 
 const putUsers = async (req, res) => {
     const id = req.params.id
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    //const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
-    await model.updateUsers(req.body, id, hashedPassword)
+    await model.updateUsers(req.body, id)
     return res.status(204).json({})
 }
 

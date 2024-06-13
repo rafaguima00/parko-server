@@ -53,22 +53,21 @@ const deleteUsers = async (id) => {
     }
 }
 
-const updateUsers = async (body, id, hashedPassword) => {
-    const { name, email, tel } = body;
+const updateUsers = async (body, id) => {
+    const { name, tel, cpf } = body;
     const updatedAt = new Date().toLocaleString();
 
     const query = `
         UPDATE users 
         SET 
             name = ?, 
-            password = ?,
-            email = ?, 
             tel = ?, 
+            cpf = ?,
             updated_at = ? 
         WHERE id = ?
     `;
 
-    const values = [name, hashedPassword, email, tel, updatedAt, id];
+    const values = [name, tel, cpf, updatedAt, id];
 
     await connection.execute(query, values);
 }
