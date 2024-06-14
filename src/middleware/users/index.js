@@ -9,7 +9,7 @@ const validateBody = async (req, res, next) => {
     const emailExists = getUsers.find(item => item.email === email)
 
     if(emailExists && email !== "") {
-        return res.status(400).json({ message: "This e-mail exists already" })
+        return res.status(400).json({ message: "Este e-mail já está em uso" })
     }
 
     if(cpf == "" || tel == "") {
@@ -19,14 +19,14 @@ const validateBody = async (req, res, next) => {
     //verificar cpf existente
     const cpfExists = getUsers.find(item => item.cpf === cpf)
     if(cpfExists && cpf !== "") {
-        return res.status(400).json({ message: "This CPF exists already" })
+        return res.status(400).json({ message: "Este CPF já está em uso" })
     }
 
     //verificar número de telefone existente
     const telExists = getUsers.find(item => item.tel === tel)
 
     if(telExists) {
-        return res.status(400).json({ message: "This phone exists already" })
+        return res.status(400).json({ message: "Este número de telefone já está em uso" })
     }
     
     next()
