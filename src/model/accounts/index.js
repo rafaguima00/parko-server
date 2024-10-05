@@ -1,10 +1,10 @@
-const connection = require("../model");
+const connection = require("../model")
 
 const getAccounts = async () => {
-    const query = `SELECT * FROM accounts`;
+    const query = `SELECT * FROM accounts`
 
-    const [items] = await connection.execute(query);
-    return items;
+    const [items] = await connection.execute(query)
+    return items
 }
 
 const createAccount = async (accounts) => {
@@ -17,7 +17,7 @@ const createAccount = async (accounts) => {
         status, 
         cost, 
         id_establishment 
-    } = accounts;
+    } = accounts
 
     const query = `
         INSERT INTO accounts(
@@ -31,8 +31,8 @@ const createAccount = async (accounts) => {
             id_establishment
         ) VALUES (
             ?,?,?,?,?,?,?,?
-        );
-    `;
+        )
+    `
 
     const values = [ 
         category, 
@@ -43,9 +43,9 @@ const createAccount = async (accounts) => {
         status, 
         cost, 
         id_establishment 
-    ];
+    ]
 
-    await connection.execute(query, values);
+    await connection.execute(query, values)
 }
 
 const updateAccount = async (body, id) => {
@@ -57,7 +57,7 @@ const updateAccount = async (body, id) => {
         date_payment, 
         status, 
         cost 
-    } = body;
+    } = body
 
     const query = `
         UPDATE 
@@ -71,7 +71,7 @@ const updateAccount = async (body, id) => {
             status = ?,
             cost = ?
         WHERE id = ?
-    `;
+    `
 
     const values = [ 
         category, 
@@ -82,15 +82,15 @@ const updateAccount = async (body, id) => {
         status, 
         cost,
         id
-    ];
+    ]
 
-    await connection.execute(query, values);
+    await connection.execute(query, values)
 }
 
 const deleteAccount = async (id) => {
     const query = "DELETE FROM accounts WHERE id = ?"
 
-    await connection.execute(query, [id]);
+    await connection.execute(query, [id])
 }
 
 module.exports = {

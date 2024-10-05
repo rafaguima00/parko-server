@@ -1,4 +1,4 @@
-const connection = require("../model");
+const connection = require("../model")
 
 const getDebts = async () => {
     const query = `
@@ -13,11 +13,11 @@ const getDebts = async () => {
         FROM debts d
         INNER JOIN users u ON u.id = d.id_costumer
         INNER JOIN establishments e ON e.id = d.id_establishment
-        INNER JOIN status_debts s ON s.id = d.status;
-    `;
+        INNER JOIN status_debts s ON s.id = d.status
+    `
 
-    const [items] = await connection.execute(query);
-    return items;
+    const [items] = await connection.execute(query)
+    return items
 }
 
 const getDebtsByOwnerId = async (id) => {
@@ -34,14 +34,14 @@ const getDebtsByOwnerId = async (id) => {
         INNER JOIN users u ON u.id = d.id_costumer
         INNER JOIN establishments e ON e.id = d.id_establishment
         INNER JOIN status_debts s ON s.id = d.status
-        WHERE u.id = ?;
-    `;
-    const [items] = await connection.execute(query, [id]);
-    return items;
+        WHERE u.id = ?
+    `
+    const [items] = await connection.execute(query, [id])
+    return items
 }
 
 const createDebt = async (debt) => {
-    const { value, id_costumer, id_establishment } = debt;
+    const { value, id_costumer, id_establishment } = debt
 
     const query = `
         INSERT INTO debts(
@@ -52,26 +52,26 @@ const createDebt = async (debt) => {
         ) VALUES (
             ?, ?, ?, 1
         )
-    `;
-    const values = [value, id_costumer, id_establishment];
+    `
+    const values = [value, id_costumer, id_establishment]
 
-    await connection.execute(query, values);
+    await connection.execute(query, values)
 }
 
 const deleteDebt = async (id) => {
-    const query = "DELETE FROM debts WHERE id = ?";
-    await connection.execute(query, [id]);
+    const query = "DELETE FROM debts WHERE id = ?"
+    await connection.execute(query, [id])
 }
 
 const updateDebt = async (debt, id) => {
-    const { value, status } = debt;
+    const { value, status } = debt
 
     const query = `
-        UPDATE debts SET value = ?, status = ? WHERE id = ?;
-    `;
-    const values = [value, status, id];
+        UPDATE debts SET value = ?, status = ? WHERE id = ?
+    `
+    const values = [value, status, id]
 
-    await connection.execute(query, values);
+    await connection.execute(query, values)
 }
 
 module.exports = {

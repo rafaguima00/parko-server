@@ -1,4 +1,4 @@
-const connection = require("../model");
+const connection = require("../model")
 
 const getReservation = async () => {
     const query = `
@@ -28,11 +28,11 @@ const getReservation = async () => {
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
         INNER JOIN vehicles v ON v.id = r.id_vehicle
-        INNER JOIN establishments e ON e.id = r.id_establishment;
-    `;
-    const [items] = await connection.execute(query);
-    return items;
-};
+        INNER JOIN establishments e ON e.id = r.id_establishment
+    `
+    const [items] = await connection.execute(query)
+    return items
+}
 
 const getReservationById = async (id) => {
     const query = `
@@ -63,11 +63,11 @@ const getReservationById = async (id) => {
         INNER JOIN status_reservation s ON s.id = r.status_reservation
         INNER JOIN vehicles v ON v.id = r.id_vehicle
         INNER JOIN establishments e ON e.id = r.id_establishment
-        WHERE r.id = ?;
-    `;
-    const [items] = await connection.execute(query, [id]);
-    return items;
-};
+        WHERE r.id = ?
+    `
+    const [items] = await connection.execute(query, [id])
+    return items
+}
 
 const getReservByParkingId = async (id) => {
     const query = `
@@ -98,16 +98,16 @@ const getReservByParkingId = async (id) => {
         INNER JOIN status_reservation s ON s.id = r.status_reservation
         INNER JOIN vehicles v ON v.id = r.id_vehicle
         INNER JOIN establishments e ON e.id = r.id_establishment
-        WHERE e.id = ?;
-    `;
-    const [items] = await connection.execute(query, [id]);
-    return items;
-};
+        WHERE e.id = ?
+    `
+    const [items] = await connection.execute(query, [id])
+    return items
+}
 
 const postReservation = async (body) => {
     
-    const hora = new Date().toLocaleTimeString();
-    const dia = new Date().toLocaleDateString();
+    const hora = new Date().toLocaleTimeString()
+    const dia = new Date().toLocaleDateString()
 
     const { 
         data_entrada, 
@@ -119,7 +119,7 @@ const postReservation = async (body) => {
         id_vehicle, 
         id_establishment, 
         parko_app 
-    } = body;
+    } = body
 
     const query = `
         INSERT INTO reservations (
@@ -137,21 +137,21 @@ const postReservation = async (body) => {
             parko_app
         ) VALUES(
             ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?
-        );
-    `;
+        )
+    `
 
-    const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, id_vehicle, id_establishment, parko_app];
+    const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, id_vehicle, id_establishment, parko_app]
 
-    await connection.execute(query, values);
-};
+    await connection.execute(query, values)
+}
 
 const deleteReservation = async (id) => {
-    await connection.execute("DELETE FROM reservations WHERE id = ?;", [id]);
-};
+    await connection.execute("DELETE FROM reservations WHERE id = ?", [id])
+}
 
 const putReservation = async (body, id) => {
 
-    const { data_entrada, hora_entrada, data_saida, hora_saida, value, status, id_vehicle } = body;
+    const { data_entrada, hora_entrada, data_saida, hora_saida, value, status, id_vehicle } = body
 
     const query = `
         UPDATE reservations 
@@ -163,12 +163,20 @@ const putReservation = async (body, id) => {
             value = ?, 
             status_reservation = ?, 
             id_vehicle = ? 
-        WHERE id = ?;
-    `;
-    const values = [data_entrada, hora_entrada, data_saida, hora_saida, value, status, id_vehicle, id];
+        WHERE id = ?
+    `
+    const values = [data_entrada, hora_entrada, data_saida, hora_saida, value, status, id_vehicle, id]
 
-    await connection.execute(query, values);
-};
+    await connection.execute(query, values)
+}
+
+const changeValue = async (body, id) => {
+    const { value } = body
+
+    const query = `UPDATE reservations SET value = ? WHERE id = ?`
+    
+    await connection.execute(query, [value, id])
+}
 
 module.exports = {
     getReservation, 
@@ -176,5 +184,6 @@ module.exports = {
     getReservByParkingId,
     postReservation, 
     deleteReservation, 
-    putReservation
-};
+    putReservation,
+    changeValue
+}

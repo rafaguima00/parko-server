@@ -1,8 +1,9 @@
-const modelVehicle = require("../../model/vehicles");
+const modelVehicle = require("../../model/vehicles")
+const modelReservations = require("../../model/reservations")
 
 const validateBody = async (req, res, next) => {
     
-    const { data_entrada, hora_entrada, data_saida, hora_saida, license_plate } = req.body;
+    const { data_entrada, hora_entrada, data_saida, hora_saida, license_plate } = req.body
 
     if(
         data_entrada === "",
@@ -22,33 +23,39 @@ const validateBody = async (req, res, next) => {
         return res.status(400).json({ message: "The field is required" })
     }
 
-    const getVehicles = await modelVehicle.getVehicles();
-    const findVehicle = getVehicles.find(item => item.license_plate === license_plate);
+    const getVehicles = await modelVehicle.getVehicles()
+    const findVehicle = getVehicles.find(item => item.license_plate === license_plate)
 
     if(!findVehicle) {
-        await modelVehicle.createVehicle(req.body, req.body.id_costumer);
+        await modelVehicle.createVehicle(req.body, req.body.id_costumer)
     }
 
-    next();
+    next()
 }
 
 const validatePutRequest = async (req, res, next) => {
 
     if(req.body.status === "Recusado") {
         const gerarNumero = () => {
-            const number1 = Math.floor(Math.random()*9000) + 1000;
-            return number1.toString();
+            const number1 = Math.floor(Math.random()*9000) + 1000
+            return number1.toString()
         }
     
-        const numeroGerado = gerarNumero();
+        const numeroGerado = gerarNumero()
     
-        console.log(numeroGerado);
+        console.log(numeroGerado)
     }
 
-    next();
+    next()
+}
+
+const atualizarValor = async (req, res, next) => {
+    const getReservations = await modelReservations.getReservation()
+    
 }
 
 module.exports = {
     validateBody,
-    validatePutRequest
-};
+    validatePutRequest,
+    atualizarValor
+}

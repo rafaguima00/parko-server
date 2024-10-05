@@ -16,14 +16,18 @@ const controllers = {
     heritage: require("../controller/heritage"),
     occurrence: require("../controller/occurrence"),
     aportes: require("../controller/aportes"),
-    retiradas: require("../controller/retiradas")
+    retiradas: require("../controller/retiradas"),
+    aberturaCx: require("../controller/abertura_caixa"),
+    tabelaFixa: require("../controller/tabela_fixa")
 }
 
 //middlewares
 const middlewares = {
     colab: require("../middleware/colaborators"),
     reserv: require("../middleware/reservations"),
-    users: require("../middleware/users")
+    users: require("../middleware/users"),
+    aportes: require("../middleware/aportes"),
+    retiradas: require("../middleware/retiradas")
 }
 
 //Definir rotas
@@ -43,6 +47,9 @@ const routes = [
     { path: "/establishments/:id", method: "delete", handler: controllers.estab.deleteEstablishment },
     { path: "/establishments/:id", method: "patch", handler: controllers.estab.updateEstablishment },
 
+    //Vagas ocupadas no estacionamento
+    { path: "/vagas_ocupadas/:id", method: "put", handler: controllers.estab.updateVagasOcupadas },
+
     //Horário de funcionamento
     { path: "/hora_funcionamento", method: "get", handler: controllers.horaFuncionamento.getOpeningHour },
     { path: "/hora_funcionamento/:id", method: "get", handler: controllers.horaFuncionamento.getOpeningHourByParking },
@@ -57,6 +64,12 @@ const routes = [
     { path: "/tabela_preco/:id", method: "put", handler: controllers.priceTable.putPriceTable },
     { path: "/tabela_preco/:id", method: "delete", handler: controllers.priceTable.deletePriceTable },
 
+    //Tabela fixa
+    { path: "/tabela_fixa/:id", method: "get", handler: controllers.tabelaFixa.getTabelaFixa },
+    { path: "/tabela_fixa/", method: "post", handler: controllers.tabelaFixa.postTabelaFixa },
+    { path: "/tabela_fixa/:id", method: "put", handler: controllers.tabelaFixa.putTabelaFixa },
+    { path: "/tabela_fixa/:id", method: "delete", handler: controllers.tabelaFixa.deleteTabelaFixa },
+
     // Reservas
     { path: "/reservations", method: "get", handler: controllers.reserv.getReservations },
     { path: "/reservations/:id", method: "get", handler: controllers.reserv.getReservationById },
@@ -64,6 +77,7 @@ const routes = [
     { path: "/reservations", method: "post", handler: controllers.reserv.postReservations },
     { path: "/reservations/:id", method: "delete", handler: controllers.reserv.deleteReservation },
     { path: "/reservations/:id", method: "put", middleware: middlewares.reserv.validatePutRequest, handler: controllers.reserv.updateReservation },
+    { path: "/reservations/user/:id", method: "put", middleware: middlewares.reserv.validatePutRequest, handler: controllers.reserv.updateValueReservation },
 
     // Usuários B2C
     { path: "/users", method: "get", handler: controllers.users.getUsers },
@@ -110,13 +124,21 @@ const routes = [
 
     //Aportes
     { path: "/aportes", method: "get", handler: controllers.aportes.getAportes },
-    { path: "/aportes", method: "post", handler: controllers.aportes.postAportes },
+    { path: "/aportes", method: "post", middleware: middlewares.aportes.validarAporte, handler: controllers.aportes.postAportes },
     { path: "/aportes/:id", method: "delete", handler: controllers.aportes.deleteAportes },
 
     //Retiradas
     { path: "/retiradas", method: "get", handler: controllers.retiradas.getRetiradas },
-    { path: "/retiradas", method: "post", handler: controllers.retiradas.postRetiradas },
-    { path: "/retiradas/:id", method: "delete", handler: controllers.retiradas.deleteRetiradas }
+    { path: "/retiradas", method: "post", middleware:middlewares.retiradas.validarRetirada, handler: controllers.retiradas.postRetiradas },
+    { path: "/retiradas/:id", method: "delete", handler: controllers.retiradas.deleteRetiradas },
+
+    //Abertura de caixa
+    { path: "/abertura_caixa", method: "get", handler: controllers.aberturaCx.getAberturaCx },
+    { path: "/abertura_caixa/:id", method: "get", handler: controllers.aberturaCx.getAberturaCxById },
+    { path: "/abertura_caixa/parking/:id", method: "get", handler: controllers.aberturaCx.getAberturaCxByPark },
+    { path: "/abertura_caixa", method: "post", handler: controllers.aberturaCx.postAberturaCx },
+    { path: "/abertura_caixa/:id", method: "put", handler: controllers.aberturaCx.updateAberturaCx },
+    { path: "/abertura_caixa/:id", method: "delete", handler: controllers.aberturaCx.deleteAberturaCx }
 ]
 
 routes.forEach(route => {

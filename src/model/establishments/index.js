@@ -1,17 +1,17 @@
-const connection = require("../model");
+const connection = require("../model")
 
 const getEstablishment = async () => {
-    const query = "SELECT e.* FROM establishments e";
-    const [items] = await connection.execute(query);
-    return items;
-};
+    const query = "SELECT e.* FROM establishments e"
+    const [items] = await connection.execute(query)
+    return items
+}
 
 const getEstablishmentById = async (id) => {
     const query = "SELECT * FROM establishments WHERE id = ?"
 
-    const [items] = await connection.execute(query, [id]);
-    return items;
-};
+    const [items] = await connection.execute(query, [id])
+    return items
+}
 
 const postEstablishment = async (body) => {
 
@@ -28,8 +28,10 @@ const postEstablishment = async (body) => {
         cidade, 
         bairro,
         longitude, 
-        latitude
-    } = body;
+        latitude, 
+        numero,
+        numero_vagas
+    } = body
 
     const query = `
         INSERT INTO establishments(
@@ -46,12 +48,14 @@ const postEstablishment = async (body) => {
             cidade, 
             bairro, 
             longitude, 
-            latitude
+            latitude,
+            numero,
+            numero_vagas
         ) VALUES (
             (SELECT MAX(e.id) from establishments e)+1,
-            ?,?,?,?,?,?,?,?,?,?,?,?,?
+            ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
         )
-    `;
+    `
     
     const values = [
         razao_social, 
@@ -66,19 +70,21 @@ const postEstablishment = async (body) => {
         cidade, 
         bairro,
         longitude, 
-        latitude
-    ];
+        latitude,
+        numero,
+        numero_vagas
+    ]
 
-    await connection.execute(query, values);
-};
+    await connection.execute(query, values)
+}
 
 const deleteEstablishment = async (id) => {
-    const query = "DELETE FROM establishments WHERE id = ?";
-    await connection.execute(query, [id]);
-};
+    const query = "DELETE FROM establishments WHERE id = ?"
+    await connection.execute(query, [id])
+}
 
 const patchEstablishment = async (id, body) => {
-    const updatedAt = new Date().toLocaleString();
+    const updatedAt = new Date().toLocaleString()
 
     const { 
         razao_social, 
@@ -93,7 +99,9 @@ const patchEstablishment = async (id, body) => {
         estado, 
         cidade, 
         bairro,
-    } = body;
+        numero,
+        numero_vagas
+    } = body
 
     const query = `
         UPDATE establishments 
@@ -110,9 +118,11 @@ const patchEstablishment = async (id, body) => {
             estado = ?,
             cidade = ?,
             bairro = ?,
+            numero = ?,
+            numero_vagas = ?,
             updated_at = ?
         WHERE id = ?
-    `;
+    `
 
     const values = [
         razao_social, 
@@ -127,17 +137,29 @@ const patchEstablishment = async (id, body) => {
         estado, 
         cidade, 
         bairro, 
+        numero,
+        numero_vagas,
         updatedAt,
         id
-    ];
+    ]
 
-    await connection.execute(query, values);
-};
+    await connection.execute(query, values)
+}
+
+const putVagasOcupadas = async (id, body) => {
+    const { vagas_ocupadas } = body
+
+    const query = "UPDATE establishments SET vagas_ocupadas = ? WHERE id = ?"
+    const values = [vagas_ocupadas, id]
+
+    await connection.execute(query, values)
+}
 
 module.exports = {
     getEstablishment,
     getEstablishmentById,
     postEstablishment, 
     deleteEstablishment, 
-    patchEstablishment
+    patchEstablishment,
+    putVagasOcupadas
 }
