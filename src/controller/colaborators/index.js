@@ -2,6 +2,7 @@ require("dotenv").config()
 const model = require("../../model/colaborators")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const nodemailer = require("nodemailer")
 
 const getColaborators = async (req, res) => {
     const result = await model.getColab()
@@ -21,30 +22,25 @@ const postColaborators = async (req, res) => {
 }
 
 const loginColaborators = async (req, res) => {
-    if((req.body.email === "" || req.body.password === "") || (req.body.email === "" && req.body.password === "")) {
+    if(req.body.email === "" || req.body.password === "") {
         return res.status(401).json({ message: "The field cannot be empty" })
-    } else {
-        const email = req.body.email.toLowerCase()
-        const users = await model.getColab()
-        const userLogin = users.find(item => item.email.toLowerCase() === email)
-            
-        try {
+    }
 
-            if (!userLogin) {
-                return res.status(401).json({ message: "E-mail or password is wrong" })
-            }
+    const email = req.body.email.toLowerCase()
+    const users = await model.getColab()
+    const userLogin = users.find(item => item.email.toLowerCase() === email)
+        
+    try {
+        if (await bcrypt.compare(req.body.password, userLogin.password)) {
+            const token = jwt.sign({ user: userLogin }, process.env.PRIVATE_KEY, { expiresIn: 1800 })
 
-            if (await bcrypt.compare(req.body.password, userLogin.password)) {
-                const token = jwt.sign({ user: userLogin }, process.env.PRIVATE_KEY, { expiresIn: 1800 })
-
-                res.status(201).json({ token })
-            } else {
-                res.status(401).json({ message: "E-mail or password is wrong" })
-            }
-        } catch (error) {
-            console.error(error)
-            res.status(500).json({ message: "Internal server error" })
+            return res.status(201).json({ token })
         }
+        
+        res.status(401).json({ message: "E-mail or password is wrong" })
+        
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error" })
     }
 }
 
@@ -62,11 +58,53 @@ const updateColaborators = async (req, res) => {
     return res.status(204).json({})
 }
 
+const sendEmail = async (req, res) => {
+    const { email } = req.body
+    const textEmail = `
+        <div>
+            <p>Clique aqui para recuperar a senha</p>
+            <a href="http://localhost:3000/new-password">Recuperar senha</a>
+        </div>
+    `
+
+    const transport = nodemailer.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "329f4273a6fb81",
+          pass: "50ca71f9056cdc"
+        }
+    })
+
+    transport.sendMail({
+        from: "Parko <suporte@parko.com.br>",
+        to: email,
+        subject: "Reset de senha - Parko app",
+        html: textEmail
+    })
+    .then(() => {
+        return res.status(200).json({ message: "E-mail enviado" })
+    })
+    .catch(() => {
+        return res.status(400).json({ message: "Erro ao enviar e-mail" })
+    })
+}
+
+const forgotPassword = async (req, res) => {
+    const { email, password } = req.body
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    await model.forgotPassword(email, hashedPassword)
+    return res.status(204).json({})
+}
+
 module.exports = {
     getColaborators,
     getColaboratorsById,
     postColaborators,
     deleteColaborators,
     updateColaborators,
-    loginColaborators
+    loginColaborators,
+    sendEmail,
+    forgotPassword
 }

@@ -1,4 +1,4 @@
-const connection = require("../model");
+const connection = require("../model")
 
 const getColab = async () => {
     const query = `
@@ -21,10 +21,10 @@ const getColab = async () => {
         FROM colaborators c
         INNER JOIN type_colaborators t ON t.id = c.e_admin
         INNER JOIN type_hiring h ON h.id = c.tipo_contratacao
-        INNER JOIN establishments e ON e.id = c.unidade;
-    `;
-    const [items] = await connection.execute(query);
-    return items;
+        INNER JOIN establishments e ON e.id = c.unidade
+    `
+    const [items] = await connection.execute(query)
+    return items
 }
 
 //Recuperar dados de colaboradores por id do estabelecimento em que trabalha
@@ -49,16 +49,16 @@ const getColaboratorById = async (id) => {
         INNER JOIN establishments e ON e.id = c.unidade
         INNER JOIN type_colaborators t ON t.id = c.e_admin
         INNER JOIN type_hiring h ON h.id = c.tipo_contratacao
-        WHERE e.id = ?;
-    `;
-    const [items] = await connection.execute(query, [id]);
-    return items;
+        WHERE e.id = ?
+    `
+    const [items] = await connection.execute(query, [id])
+    return items
 }
 
 const postColab = async (body, hashedPassword) => {
 
-    const { colaborator, email, cpf, rg, tel, data_nasc, inicio_contrato, e_admin, tipo_contratacao, unidade } = body;
-    const createdAt = new Date().toLocaleString();
+    const { colaborator, email, cpf, rg, tel, data_nasc, inicio_contrato, e_admin, tipo_contratacao, unidade } = body
+    const createdAt = new Date().toLocaleString()
 
     const query = `
         INSERT INTO colaborators(
@@ -76,24 +76,24 @@ const postColab = async (body, hashedPassword) => {
             unidade
         ) VALUES (
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-        );
-    `;
+        )
+    `
     const values = [
         colaborator, email.toLowerCase(), hashedPassword, cpf, rg, tel, data_nasc, createdAt, inicio_contrato, e_admin, tipo_contratacao, unidade
-    ];
+    ]
 
-    await connection.execute(query, values);
+    await connection.execute(query, values)
 }
 
 const deleteColab = async (id) => {
-    const query = "DELETE FROM colaborators WHERE id = ?";
+    const query = "DELETE FROM colaborators WHERE id = ?"
     await connection.execute(query, [id])
 }
 
 const putColab = async (id, body, hashedPassword) => {
-    const { colaborator, email, tel, e_admin, tipo_contratacao } = body;
+    const { colaborator, email, tel, e_admin, tipo_contratacao } = body
 
-    const updatedAt = new Date().toLocaleString();
+    const updatedAt = new Date().toLocaleString()
     const query = `
         UPDATE colaborators 
         SET 
@@ -105,10 +105,24 @@ const putColab = async (id, body, hashedPassword) => {
             tipo_contratacao = ?, 
             updated_at = ? 
         WHERE id = ?
-    `;
-    const values = [colaborator, email, hashedPassword, tel, e_admin, tipo_contratacao, updatedAt, id];
+    `
+    const values = [colaborator, email, hashedPassword, tel, e_admin, tipo_contratacao, updatedAt, id]
 
-    await connection.execute(query, values);
+    await connection.execute(query, values)
+}
+
+const forgotPassword = async (email, hashedPassword) => {
+    const updatedAt = new Date().toLocaleString()
+    const query = `
+        UPDATE colaborators
+        SET 
+            password = ?,
+            updated_at = ?
+        WHERE email = ?
+    `
+    const values = [hashedPassword, updatedAt, email]
+
+    await connection.execute(query, values)
 }
 
 module.exports = {
@@ -116,5 +130,6 @@ module.exports = {
     getColaboratorById,
     postColab,
     deleteColab,
-    putColab
+    putColab,
+    forgotPassword
 }

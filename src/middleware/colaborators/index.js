@@ -69,7 +69,39 @@ const validateRequestPut = async (req, res, next) => {
     next()
 }
 
+const verifyEmail = async (req, res, next) => {
+    const { email } = req.body
+    const getAll = await model.getColab()
+    const emailExists = getAll.find(item => item.email == email)
+
+    if(email === "") {
+        return res.status(400).json({ message: "Insira um e-mail válido" })
+    }
+
+    if(emailExists) {
+        return next()
+    }
+    
+    return res.status(401).json({ message: "Este e-mail não está cadastrado no sistema" })
+}
+
+const validatePassword = async (req, res, next) => {
+    const { password, confirmPassword } = req.body
+
+    if(password === "" || confirmPassword === "") {
+        return res.status(400).json({ message: "Preencha o campo vazio" })
+    }
+
+    if(password !== confirmPassword) {
+        return res.status(401).json({ message: "As senhas devem ser iguais" })
+    }
+
+    next()
+}
+
 module.exports = {
     validateBody,
-    validateRequestPut
+    validateRequestPut,
+    validatePassword,
+    verifyEmail
 }

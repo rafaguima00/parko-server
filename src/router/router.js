@@ -39,8 +39,9 @@ const routes = [
     { path: "/colaborators/:id", method: "delete", handler: controllers.colab.deleteColaborators },
     { path: "/colaborators/:id", method: "put", middleware: middlewares.colab.validateRequestPut, handler: controllers.colab.updateColaborators },
     { path: "/login", method: "post", handler: controllers.colab.loginColaborators },
+    { path: "/verify-email", method: "post", middleware: middlewares.colab.verifyEmail, handler: controllers.colab.sendEmail },
 
-    //estacionamentos
+    //Estacionamentos
     { path: "/establishments", method: "get", handler: controllers.estab.getEstablishments },
     { path: "/establishments/:id", method: "get", handler: controllers.estab.getEstablishmentById },
     { path: "/establishments", method: "post", handler: controllers.estab.createEstablishment },
