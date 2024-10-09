@@ -59,6 +59,9 @@ const updateAccount = async (body, id) => {
         cost 
     } = body
 
+    const time = new Date().toTimeString()
+    const createdAt = `${date_created}, ${time}`
+
     const query = `
         UPDATE 
             accounts 
@@ -77,7 +80,7 @@ const updateAccount = async (body, id) => {
         category, 
         desc_item, 
         value, 
-        date_created, 
+        createdAt, 
         date_payment, 
         status, 
         cost,

@@ -50,7 +50,7 @@ const abrirCaixa = async (body) => {
 }
 
 const updateCaixa = async (id, body) => {
-    const { value } = body
+    const { value, aberto } = body
 
     const dataFechamento = new Date().toLocaleDateString("pt-br")
     const horaFechamento = new Date().toLocaleTimeString("pt-br")
@@ -62,10 +62,10 @@ const updateCaixa = async (id, body) => {
             value = ?,
             data_fechamento = ?,
             hora_fechamento = ?,
-            aberto = 0
+            aberto = ?
         WHERE id = ?;
     `
-    const values = [value, dataFechamento, horaFechamento, id]
+    const values = [value, dataFechamento, horaFechamento, aberto, id]
 
     await connection.execute(query, values)
 }
