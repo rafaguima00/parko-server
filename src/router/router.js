@@ -18,7 +18,8 @@ const controllers = {
     aportes: require("../controller/aportes"),
     retiradas: require("../controller/retiradas"),
     aberturaCx: require("../controller/abertura_caixa"),
-    tabelaFixa: require("../controller/tabela_fixa")
+    tabelaFixa: require("../controller/tabela_fixa"),
+    favorites: require("../controller/favorites")
 }
 
 //middlewares
@@ -87,6 +88,11 @@ const routes = [
     { path: "/users/:id", method: "put", middleware: middlewares.users.updateBody, handler: controllers.users.putUsers },
     { path: "/users/login", method: "post", handler: controllers.users.loginUsers },
 
+    // Favoritos
+    { path: "/favorites/:id", method: "get", handler: controllers.favorites.getFavorites },
+    { path: "/favorites", method: "post", handler: controllers.favorites.postFavorites },
+    { path: "/favorites", method: "delete", handler: controllers.favorites.deleteFavorites },
+
     // Dívidas
     { path: "/debts", method: "get", handler: controllers.debts.getDebts },
     { path: "/debts/:id", method: "get", handler: controllers.debts.getSelectedDebt },
@@ -100,6 +106,7 @@ const routes = [
     { path: "/vehicles", method: "post", handler: controllers.vehicles.postVehicles },
     { path: "/vehicles/:id", method: "delete", handler: controllers.vehicles.deleteVehicle },
 
+    // Avaliações
     { path: "/ratings", method: "get", handler: controllers.ratings.getRatings },
     { path: "/ratings", method: "post", handler: controllers.ratings.postRatings },
     { path: "/ratings/:id", method: "delete", handler: controllers.ratings.deleteRatings },

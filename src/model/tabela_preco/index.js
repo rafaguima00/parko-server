@@ -1,25 +1,25 @@
-const connection = require("../model");
+const connection = require("../model")
 
 const getPriceTable = async () => {
     const query = `
-        SELECT * FROM price_table;
-    `;
-    const [items] = await connection.execute(query);
+        SELECT * FROM price_table
+    `
+    const [items] = await connection.execute(query)
 
-    return items;
-};
+    return items
+}
 
 const getPriceTableById = async (id) => {
     const query = `
-        SELECT * FROM price_table WHERE id_estacionamento = ?;
-    `;
-    const [items] = await connection.execute(query, [id]);
+        SELECT * FROM price_table WHERE id_estacionamento = ?
+    `
+    const [items] = await connection.execute(query, [id])
 
-    return items;
-};
+    return items
+}
 
 const createPriceTable = async (body) => {
-    const { id_estacionamento, tempo_tolerancia, valor_hora, valor_fracao_hora } = body;
+    const { id_estacionamento, tempo_tolerancia, valor_hora, valor_fracao_hora } = body
     const query = `
         INSERT INTO price_table (
             id_estacionamento,
@@ -28,16 +28,16 @@ const createPriceTable = async (body) => {
             valor_fracao_hora
         ) VALUES (
             ?, ?, ?, ?
-        );
-    `;
-    const values = [id_estacionamento, tempo_tolerancia, valor_hora, valor_fracao_hora];
+        )
+    `
+    const values = [id_estacionamento, tempo_tolerancia, valor_hora, valor_fracao_hora]
 
-    await connection.execute(query, values);
-};
+    await connection.execute(query, values)
+}
 
 const updatePriceTable = async (body, idEstacionamento) => {
 
-    const { tempo_tolerancia, valor_hora, valor_fracao_hora } = body;
+    const { tempo_tolerancia, valor_hora, valor_fracao_hora } = body
     const query = `
         UPDATE price_table 
         SET 
@@ -45,30 +45,30 @@ const updatePriceTable = async (body, idEstacionamento) => {
             valor_hora = ?, 
             valor_fracao_hora = ? 
         WHERE id_estacionamento = ?
-    `;
-    const values = [tempo_tolerancia, valor_hora, valor_fracao_hora, idEstacionamento];
+    `
+    const values = [tempo_tolerancia, valor_hora, valor_fracao_hora, idEstacionamento]
 
-    const update = await connection.execute(query, values);
+    const update = await connection.execute(query, values)
 
     if(update) {
-        const updatedAt = new Date().toLocaleString();
+        const updatedAt = new Date().toLocaleString()
 
         const query = `
             UPDATE establishments
             SET 
                 updated_at = ?
             WHERE id = ?
-        `;
-        const values = [updatedAt, idEstacionamento];
+        `
+        const values = [updatedAt, idEstacionamento]
 
-        await connection.execute(query, values);
+        await connection.execute(query, values)
     }
-};
+}
 
 const deletePriceTable = async (id) => {
-    const query = "DELETE FROM price_table WHERE id_estacionamento = ?";
-    await connection.execute(query, [id]);
-};
+    const query = "DELETE FROM price_table WHERE id_estacionamento = ?"
+    await connection.execute(query, [id])
+}
 
 module.exports = {
     getPriceTable,
@@ -76,4 +76,4 @@ module.exports = {
     createPriceTable,
     updatePriceTable,
     deletePriceTable
-};
+}

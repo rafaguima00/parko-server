@@ -1,53 +1,66 @@
-const connection = require("../model");
+const connection = require("../model")
 const middleware = {
     avaliacao: require("../../middleware/ratings")
-};
+}
 
 const getRatings = async () => {
     const query = `
         SELECT r.*, u.name as name_costumer FROM ratings r
-        INNER JOIN users u ON u.id = r.id_costumer;
+        INNER JOIN users u ON u.id = r.id_costumer
     `
-    const [items] = await connection.execute(query);
+    const [items] = await connection.execute(query)
 
-    return items;
-};
+    return items
+}
 
 const createRating = async (body) => {
-    const { id_costumer, id_establishment, rate, comments } = body;
+    const { id_costumer, id_establishment, id_reservation, rate, comments } = body
 
     const query = `
         INSERT INTO ratings (
             id_costumer,
             id_establishment,
+            id_reservation,
             rate,
             comments
-        ) VALUES (?, ?, ?, ?)
-    `;
-    const values = [id_costumer, id_establishment, rate, comments];
-    const createRate = await connection.execute(query, values);
+        ) VALUES (?, ?, ?, ?, ?)
+    `
+    const values = [id_costumer, id_establishment, id_reservation, rate, comments]
+    const createRate = await connection.execute(query, values)
 
-    return middleware.avaliacao.verificarAvaliacao(createRate, id_establishment);
-};
+    if(createRate) {
+        const query = `
+            UPDATE reservations 
+            SET 
+                rated = ?
+            WHERE id = ?
+        `
+        const values = [rate, id_reservation]
+
+        await connection.execute(query, values)
+    }
+
+    return middleware.avaliacao.verificarAvaliacao(createRate, id_establishment)
+}
 
 const deleteRating = async (id) => {
     const query = `
         SELECT id_establishment FROM ratings WHERE id = ?
-    `;
-    const [select] = await connection.execute(query, [id]);
-    const idEstacionamento = select[0].id_establishment;
+    `
+    const [select] = await connection.execute(query, [id])
+    const idEstacionamento = select[0].id_establishment
 
-    //Deletar dado
+    // Deletar dado
     if(select !== undefined) {
-        const query = "DELETE FROM ratings WHERE id = ?;"
-        const deleted = await connection.execute(query, [id]);
+        const query = "DELETE FROM ratings WHERE id = ?"
+        const deleted = await connection.execute(query, [id])
 
-        return middleware.avaliacao.verificarAvaliacao(deleted, idEstacionamento);
+        return middleware.avaliacao.verificarAvaliacao(deleted, idEstacionamento)
     }
-};
+}
 
 const updateRating = async (body, id) => {
-    const { rate, comments, id_establishment } = body;
+    const { rate, comments, id_establishment } = body
 
     const query = `
         UPDATE ratings
@@ -55,16 +68,16 @@ const updateRating = async (body, id) => {
             rate = ?,
             comments = ? 
         WHERE id = ? 
-    `;
-    const values = [rate, comments, id];
-    const updated = await connection.execute(query, values);
+    `
+    const values = [rate, comments, id]
+    const updated = await connection.execute(query, values)
 
-    return middleware.avaliacao.verificarAvaliacao(updated, id_establishment);
-};
+    return middleware.avaliacao.verificarAvaliacao(updated, id_establishment)
+}
 
 module.exports = {
     getRatings,
     createRating,
     deleteRating,
     updateRating
-};
+}

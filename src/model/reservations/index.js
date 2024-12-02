@@ -23,7 +23,8 @@ const getReservation = async () => {
             v.license_plate,
             r.id_establishment,
             e.name as establishment,
-            e.image as image_url_establishment
+            e.image as image_url_establishment,
+            r.rated
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -57,7 +58,8 @@ const getReservationById = async (id) => {
             v.license_plate,
             r.id_establishment,
             e.name as establishment,
-            e.image as image_url_establishment
+            e.image as image_url_establishment,
+            r.rated
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -92,7 +94,8 @@ const getReservByParkingId = async (id) => {
             v.license_plate,
             r.id_establishment,
             e.name as establishment,
-            e.image as image_url_establishment
+            e.image as image_url_establishment,
+            r.rated
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -110,15 +113,16 @@ const postReservation = async (body) => {
     const dia = new Date().toLocaleDateString()
 
     const { 
-        data_entrada, 
-        hora_entrada, 
-        data_saida, 
-        hora_saida, 
-        value, 
-        id_costumer, 
-        id_vehicle, 
-        id_establishment, 
-        parko_app 
+        data_entrada,
+        hora_entrada,
+        data_saida,
+        hora_saida,
+        value,
+        id_costumer,
+        status_reservation,
+        id_vehicle,
+        id_establishment,
+        parko_app
     } = body
 
     const query = `
@@ -136,11 +140,11 @@ const postReservation = async (body) => {
             id_establishment,
             parko_app
         ) VALUES(
-            ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )
     `
 
-    const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, id_vehicle, id_establishment, parko_app]
+    const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, status_reservation, id_vehicle, id_establishment, parko_app]
 
     await connection.execute(query, values)
 }
