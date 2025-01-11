@@ -4,14 +4,12 @@ const getFavorites = async (id) => {
     const query = `
         SELECT 
             f.*,
-            e.name as name_parking,
-            e.end as end_parking,
-            e.image as image_parking
+            e.*
         FROM favorites f
         INNER JOIN establishments e ON e.id = f.parking_id
         WHERE user_id = ?
     `
-    // JOIN parkings ON favorites.parking_id = parkings.id
+    
     const [items] = await connection.execute(query, [id])
     return items
 }

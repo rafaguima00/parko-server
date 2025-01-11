@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 
-//controllers
+// controllers
 const controllers = {
     colab: require("../controller/colaborators"),
     estab: require("../controller/establishments"),
@@ -19,10 +19,12 @@ const controllers = {
     retiradas: require("../controller/retiradas"),
     aberturaCx: require("../controller/abertura_caixa"),
     tabelaFixa: require("../controller/tabela_fixa"),
-    favorites: require("../controller/favorites")
+    favorites: require("../controller/favorites"),
+    generatateCode: require("../controller/code_confirmation"),
+    faq: require("../controller/ajuda")
 }
 
-//middlewares
+// middlewares
 const middlewares = {
     colab: require("../middleware/colaborators"),
     reserv: require("../middleware/reservations"),
@@ -31,9 +33,12 @@ const middlewares = {
     retiradas: require("../middleware/retiradas")
 }
 
-//Definir rotas
+// Definir rotas
 const routes = [
-    //Colaboradores
+    //  Ajuda
+    { path: "/faq", method: "get", handler: controllers.faq.getFaq },
+
+    // Colaboradores
     { path: "/colaborators", method: "get", handler: controllers.colab.getColaborators },
     { path: "/colaborators/:id", method: "get", handler: controllers.colab.getColaboratorsById },
     { path: "/colaborators", method: "post", middleware: middlewares.colab.validateBody, handler: controllers.colab.postColaborators },
@@ -42,31 +47,31 @@ const routes = [
     { path: "/login", method: "post", handler: controllers.colab.loginColaborators },
     { path: "/verify-email", method: "post", middleware: middlewares.colab.verifyEmail, handler: controllers.colab.sendEmail },
 
-    //Estacionamentos
+    // Estacionamentos
     { path: "/establishments", method: "get", handler: controllers.estab.getEstablishments },
     { path: "/establishments/:id", method: "get", handler: controllers.estab.getEstablishmentById },
     { path: "/establishments", method: "post", handler: controllers.estab.createEstablishment },
     { path: "/establishments/:id", method: "delete", handler: controllers.estab.deleteEstablishment },
     { path: "/establishments/:id", method: "patch", handler: controllers.estab.updateEstablishment },
 
-    //Vagas ocupadas no estacionamento
+    // Vagas ocupadas no estacionamento
     { path: "/vagas_ocupadas/:id", method: "put", handler: controllers.estab.updateVagasOcupadas },
 
-    //Horário de funcionamento
+    // Horário de funcionamento
     { path: "/hora_funcionamento", method: "get", handler: controllers.horaFuncionamento.getOpeningHour },
     { path: "/hora_funcionamento/:id", method: "get", handler: controllers.horaFuncionamento.getOpeningHourByParking },
     { path: "/hora_funcionamento", method: "post", handler: controllers.horaFuncionamento.postOpeningHour },
     { path: "/hora_funcionamento/:id", method: "delete", handler: controllers.horaFuncionamento.deleteOpeningHour },
     { path: "/hora_funcionamento/:id", method: "put", handler: controllers.horaFuncionamento.putOpeningHour },
 
-    //Tabela de preços
+    // Tabela de preços
     { path: "/tabela_preco", method: "get", handler: controllers.priceTable.getPriceTable },
     { path: "/tabela_preco/:id", method: "get", handler: controllers.priceTable.getPriceTableById },
     { path: "/tabela_preco", method: "post", handler: controllers.priceTable.postPriceTable },
     { path: "/tabela_preco/:id", method: "put", handler: controllers.priceTable.putPriceTable },
     { path: "/tabela_preco/:id", method: "delete", handler: controllers.priceTable.deletePriceTable },
 
-    //Tabela fixa
+    // Tabela fixa
     { path: "/tabela_fixa/:id", method: "get", handler: controllers.tabelaFixa.getTabelaFixa },
     { path: "/tabela_fixa/", method: "post", handler: controllers.tabelaFixa.postTabelaFixa },
     { path: "/tabela_fixa/:id", method: "put", handler: controllers.tabelaFixa.putTabelaFixa },
@@ -78,8 +83,13 @@ const routes = [
     { path: "/reservations/parking/:id", method: "get", handler: controllers.reserv.getReservByParkingId },
     { path: "/reservations", method: "post", handler: controllers.reserv.postReservations },
     { path: "/reservations/:id", method: "delete", handler: controllers.reserv.deleteReservation },
-    { path: "/reservations/:id", method: "put", middleware: middlewares.reserv.validatePutRequest, handler: controllers.reserv.updateReservation },
-    { path: "/reservations/user/:id", method: "put", middleware: middlewares.reserv.validatePutRequest, handler: controllers.reserv.updateValueReservation },
+    { path: "/reservations/:id", method: "put", handler: controllers.reserv.updateReservation },
+    { path: "/reservations/user/:id", method: "put", handler: controllers.reserv.updateValueReservation },
+
+    // Gerar e verificar código de confirmação
+    { path: "/status-code/:id", method: "get", handler: controllers.generatateCode.statusCode },
+    { path: "/generate-code", method: "post", handler: controllers.generatateCode.generateCode },
+    { path: "/verify-code", method: "post", handler: controllers.generatateCode.verifyCode },
 
     // Usuários B2C
     { path: "/users", method: "get", handler: controllers.users.getUsers },
@@ -130,17 +140,17 @@ const routes = [
     { path: "/occurrence/:id", method: "put", handler: controllers.occurrence.putOccurrence },
     { path: "/occurrence/:id", method: "delete", handler: controllers.occurrence.deleteOccurrence },
 
-    //Aportes
+    // Aportes
     { path: "/aportes", method: "get", handler: controllers.aportes.getAportes },
     { path: "/aportes", method: "post", middleware: middlewares.aportes.validarAporte, handler: controllers.aportes.postAportes },
     { path: "/aportes/:id", method: "delete", handler: controllers.aportes.deleteAportes },
 
-    //Retiradas
+    // Retiradas
     { path: "/retiradas", method: "get", handler: controllers.retiradas.getRetiradas },
     { path: "/retiradas", method: "post", middleware:middlewares.retiradas.validarRetirada, handler: controllers.retiradas.postRetiradas },
     { path: "/retiradas/:id", method: "delete", handler: controllers.retiradas.deleteRetiradas },
 
-    //Abertura de caixa
+    // Abertura de caixa
     { path: "/abertura_caixa", method: "get", handler: controllers.aberturaCx.getAberturaCx },
     { path: "/abertura_caixa/:id", method: "get", handler: controllers.aberturaCx.getAberturaCxById },
     { path: "/abertura_caixa/parking/:id", method: "get", handler: controllers.aberturaCx.getAberturaCxByPark },

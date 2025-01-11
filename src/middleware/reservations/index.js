@@ -33,29 +33,6 @@ const validateBody = async (req, res, next) => {
     next()
 }
 
-const validatePutRequest = async (req, res, next) => {
-
-    if(req.body.status === "Recusado") {
-        const gerarNumero = () => {
-            const number1 = Math.floor(Math.random()*9000) + 1000
-            return number1.toString()
-        }
-    
-        const numeroGerado = gerarNumero()
-    
-        console.log(numeroGerado)
-    }
-
-    next()
-}
-
-const atualizarValor = async (req, res, next) => {
-    const getReservations = await modelReservations.getReservation()
-    
-}
-
 module.exports = {
-    validateBody,
-    validatePutRequest,
-    atualizarValor
+    validateBody
 }
