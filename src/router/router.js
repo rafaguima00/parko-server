@@ -21,7 +21,8 @@ const controllers = {
     tabelaFixa: require("../controller/tabela_fixa"),
     favorites: require("../controller/favorites"),
     generatateCode: require("../controller/code_confirmation"),
-    faq: require("../controller/ajuda")
+    faq: require("../controller/ajuda"),
+    pagamento: require("../controller/pagamento")
 }
 
 // middlewares
@@ -35,6 +36,9 @@ const middlewares = {
 
 // Definir rotas
 const routes = [
+    // Pagamento
+    { path: "/create_payment", method: "post", handler: controllers.pagamento.pagamento },
+
     //  Ajuda
     { path: "/faq", method: "get", handler: controllers.faq.getFaq },
 
