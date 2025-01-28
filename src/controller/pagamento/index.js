@@ -15,7 +15,6 @@ const pagamento = async (req, res) => {
 
     const idempotencyKey = uuidv4()
 
-    // Create the request object
     const body = {
         token: token,
         transaction_amount: transaction_amount,
