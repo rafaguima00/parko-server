@@ -21,7 +21,7 @@ const getReservByParkingId = async (req, res) => {
 
 const postReservations = async (req, res) => {
     const create = await model.postReservation(req.body)
-    res.status(201).json(create)
+    res.status(200).json(create)
 }
 
 const deleteReservation = async (req, res) => {

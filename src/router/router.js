@@ -22,7 +22,8 @@ const controllers = {
     favorites: require("../controller/favorites"),
     generatateCode: require("../controller/code_confirmation"),
     faq: require("../controller/ajuda"),
-    pagamento: require("../controller/pagamento")
+    pagamento: require("../controller/pagamento"),
+    request: require("../controller/request_end_reservation")
 }
 
 // middlewares
@@ -56,7 +57,7 @@ const routes = [
     { path: "/establishments/:id", method: "get", handler: controllers.estab.getEstablishmentById },
     { path: "/establishments", method: "post", handler: controllers.estab.createEstablishment },
     { path: "/establishments/:id", method: "delete", handler: controllers.estab.deleteEstablishment },
-    { path: "/establishments/:id", method: "patch", handler: controllers.estab.updateEstablishment },
+    { path: "/establishments/:id", method: "put", handler: controllers.estab.updateEstablishment },
 
     // Vagas ocupadas no estacionamento
     { path: "/vagas_ocupadas/:id", method: "put", handler: controllers.estab.updateVagasOcupadas },
@@ -94,6 +95,11 @@ const routes = [
     { path: "/status-code/:id", method: "get", handler: controllers.generatateCode.statusCode },
     { path: "/generate-code", method: "post", handler: controllers.generatateCode.generateCode },
     { path: "/verify-code", method: "post", handler: controllers.generatateCode.verifyCode },
+
+    // Solicitação de finalização de reserva
+    { path: "/request_end/:id", method: "get", handler: controllers.request.getAllRequest },
+    { path: "/request_end", method: "post", handler: controllers.request.postRequest },
+    { path: "/request_end", method: "put", handler: controllers.request.updateRequest },
 
     // Usuários B2C
     { path: "/users", method: "get", handler: controllers.users.getUsers },

@@ -8,9 +8,9 @@ const app = express()
 const PORT = process.env.PORT
 
 app.use(cors({
-    origin: ["http://localhost:3000", "https://parkoapp.com.br"],
+    origin: [`${process.env.URL_FROND_END}`],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }))
 app.use(express.json())
 app.use("/api", router)

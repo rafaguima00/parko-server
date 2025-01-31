@@ -36,7 +36,7 @@ const abrirCaixa = async (body) => {
             data_fechamento,
             hora_fechamento,
             value
-        ) VALUES (?, ?, ?, ?, "", "", ?);
+        ) VALUES (?, ?, ?, ?, "", "", ?)
     `
     const values = [
         id_establishment,
