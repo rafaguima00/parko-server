@@ -8,7 +8,7 @@ const app = express()
 const PORT = process.env.PORT
 
 app.use(cors({
-    origin: [`${process.env.URL_FROND_END}`],
+    origin: [`${process.env.URL_FRONT_END}`],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }))
