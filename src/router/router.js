@@ -23,7 +23,8 @@ const controllers = {
     generatateCode: require("../controller/code_confirmation"),
     faq: require("../controller/ajuda"),
     pagamento: require("../controller/pagamento"),
-    request: require("../controller/request_end_reservation")
+    request: require("../controller/request_end_reservation"),
+    privacy: require("../controller/privacy-policy")
 }
 
 // middlewares
@@ -166,7 +167,10 @@ const routes = [
     { path: "/abertura_caixa/parking/:id", method: "get", handler: controllers.aberturaCx.getAberturaCxByPark },
     { path: "/abertura_caixa", method: "post", handler: controllers.aberturaCx.postAberturaCx },
     { path: "/abertura_caixa/:id", method: "put", handler: controllers.aberturaCx.updateAberturaCx },
-    { path: "/abertura_caixa/:id", method: "delete", handler: controllers.aberturaCx.deleteAberturaCx }
+    { path: "/abertura_caixa/:id", method: "delete", handler: controllers.aberturaCx.deleteAberturaCx },
+
+    // Política de Privacidade
+    { path: "/privacy-policy", method: "get", handler: controllers.privacy.getPrivacyPolicy }
 ]
 
 routes.forEach(route => {
