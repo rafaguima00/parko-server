@@ -1,5 +1,21 @@
 const connection = require("../model")
 
+const dataFormatada = (date) => {
+    if(date.includes("-")) {
+        const arrayData = date.split("-")
+
+        if(arrayData[0].length == 4) {
+            return `${arrayData[2]}/${arrayData[1]}/${arrayData[0]}`
+        } 
+
+        return `${arrayData[0]}/${arrayData[1]}/${arrayData[2]}`
+    }
+
+    if(date === "") return ""
+
+    return date
+}
+
 const getReservation = async () => {
     const query = `
         SELECT 
@@ -108,9 +124,7 @@ const getReservByParkingId = async (id) => {
     const [items] = await connection.execute(query, [id])
     return items
 }
-
 const postReservation = async (body) => {
-    
     const hora = new Date().toLocaleTimeString()
     const dia = new Date().toLocaleDateString()
 
@@ -141,14 +155,42 @@ const postReservation = async (body) => {
             id_vehicle,
             id_establishment,
             parko_app
-        ) VALUES(
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-        )
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `
 
-    const values = [dia, hora, data_entrada, hora_entrada, data_saida, hora_saida, value, id_costumer, status_reservation, id_vehicle, id_establishment, parko_app]
+    const values = [
+        dia, hora,
+        dataFormatada(data_entrada), 
+        hora_entrada,
+        dataFormatada(data_saida), 
+        hora_saida,
+        value,
+        id_costumer,
+        status_reservation,
+        id_vehicle,
+        id_establishment,
+        parko_app
+    ]
 
-    await connection.execute(query, values)
+    const [result] = await connection.execute(query, values)
+
+    if (result.affectedRows === 1) {
+        const reservationId = result.insertId
+
+        await connection.execute(`
+            UPDATE establishments 
+            SET vagas_ocupadas = vagas_ocupadas + 1 
+            WHERE id = ?
+        `, [id_establishment])
+
+        const [rows] = await connection.execute(`
+            SELECT * FROM reservations WHERE id = ?
+        `, [reservationId])
+
+        return rows[0]
+    }
+
+    return null
 }
 
 const deleteReservation = async (id) => {
@@ -157,7 +199,16 @@ const deleteReservation = async (id) => {
 
 const putReservation = async (body, id) => {
 
-    const { data_entrada, hora_entrada, data_saida, hora_saida, value, status, id_vehicle } = body
+    const { 
+        data_entrada, 
+        hora_entrada, 
+        data_saida = "", 
+        hora_saida = "", 
+        value, 
+        status, 
+        id_vehicle, 
+        id_establishment 
+    } = body
 
     const query = `
         UPDATE reservations 
@@ -171,9 +222,36 @@ const putReservation = async (body, id) => {
             id_vehicle = ? 
         WHERE id = ?
     `
-    const values = [data_entrada, hora_entrada, data_saida, hora_saida, value, status, id_vehicle, id]
+    const values = [
+        dataFormatada(data_entrada), 
+        hora_entrada, 
+        dataFormatada(data_saida), 
+        hora_saida, 
+        value, 
+        status, 
+        id_vehicle, 
+        id
+    ]
 
-    await connection.execute(query, values)
+    const [result] = await connection.execute(query, values)
+
+    if(result.affectedRows === 1) {
+
+        if (status === 4) {
+            const updateQuery = `
+                UPDATE establishments
+                SET vagas_ocupadas = vagas_ocupadas - 1
+                WHERE id = ?
+            `
+            await connection.execute(updateQuery, [id_establishment])
+        }
+
+        const [rows] = await connection.execute(`
+            SELECT * FROM reservations WHERE id = ?
+        `, [id])
+
+        return rows[0]
+    }
 }
 
 const changeValue = async (body, id) => {

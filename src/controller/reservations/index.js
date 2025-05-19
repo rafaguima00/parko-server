@@ -31,8 +31,8 @@ const deleteReservation = async (req, res) => {
 
 const updateReservation = async (req, res) => {
     const id = req.params.id
-    await model.putReservation(req.body, id)
-    res.status(204).json({})
+    const update = await model.putReservation(req.body, id)
+    res.status(200).json(update)
 }
 
 const updateValueReservation = async (req, res) => {

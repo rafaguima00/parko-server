@@ -21,14 +21,14 @@ const getAberturaCxByPark = async (req, res) => {
 
 const postAberturaCx = async (req, res) => {
     const create = await model.abrirCaixa(req.body)
-    res.status(201).json(create)
+    res.status(200).json(create)
 }
 
 const updateAberturaCx = async (req, res) => {
     const id = req.params.id
-    await model.updateCaixa(id, req.body)
+    const updated = await model.updateCaixa(id, req.body)
 
-    res.status(204).json({})
+    res.status(200).json(updated)
 }
 
 const deleteAberturaCx = async (req, res) => {

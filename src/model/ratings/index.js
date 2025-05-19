@@ -13,6 +13,17 @@ const getRatings = async () => {
     return items
 }
 
+const getRatingsByIdEstablishment = async (id) => {
+    const query = `
+        SELECT r.*, u.name as name_costumer FROM ratings r
+        INNER JOIN users u ON u.id = r.id_costumer
+        WHERE id_establishment = ?
+    `
+    const [items] = await connection.execute(query, [id])
+
+    return items
+}
+
 const createRating = async (body) => {
     const { id_costumer, id_establishment, id_reservation, rate, comments } = body
 
@@ -77,6 +88,7 @@ const updateRating = async (body, id) => {
 
 module.exports = {
     getRatings,
+    getRatingsByIdEstablishment,
     createRating,
     deleteRating,
     updateRating

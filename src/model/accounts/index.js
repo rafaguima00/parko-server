@@ -16,7 +16,8 @@ const createAccount = async (accounts) => {
         date_payment, 
         status, 
         cost, 
-        id_establishment 
+        id_establishment, 
+        id_colaborator
     } = accounts
 
     const query = `
@@ -45,7 +46,43 @@ const createAccount = async (accounts) => {
         id_establishment 
     ]
 
-    await connection.execute(query, values)
+    const [result] = await connection.execute(query, values)
+
+    if(result.affectedRows === 1) {
+        if(category === "Aporte") {
+            const query = `
+                INSERT INTO aportes(
+                    id_establishment,
+                    id_colaborator,
+                    value,
+                    created_at,
+                    description
+                ) VALUES (
+                    ?, ?, ?, ?, ?
+                )
+            `
+            const values = [id_establishment, id_colaborator, value, date_created, desc_item]
+
+            return await connection.execute(query, values)
+        }
+
+        if(category === "Retirada") {
+            const query = `
+                INSERT INTO retiradas(
+                    id_establishment,
+                    id_colaborator,
+                    value,
+                    created_at,
+                    description
+                ) VALUES (
+                    ?, ?, ?, ?, ?
+                )
+            `
+            const values = [id_establishment, id_colaborator, value, date_created, desc_item]
+
+            return await connection.execute(query, values)
+        }
+    }
 }
 
 const updateAccount = async (body, id) => {

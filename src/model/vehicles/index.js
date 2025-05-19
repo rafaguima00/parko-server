@@ -1,4 +1,4 @@
-const connection = require("../model");
+const connection = require("../model")
 
 const getVehicles = async () => {
     const query = `
@@ -9,11 +9,11 @@ const getVehicles = async () => {
             v.license_plate,
             u.name AS owner
         FROM vehicles v 
-        INNER JOIN users u ON u.id = v.id_costumer;
-    `;
+        INNER JOIN users u ON u.id = v.id_costumer
+    `
 
-    const [items] = await connection.execute(query);
-    return items;
+    const [items] = await connection.execute(query)
+    return items
 }
 
 const getVehiclesByOwnerId = async (id) => {
@@ -26,37 +26,35 @@ const getVehiclesByOwnerId = async (id) => {
             u.name AS owner
         FROM vehicles v 
         INNER JOIN users u ON u.id = v.id_costumer
-        WHERE u.id = ?;
-    `;
+        WHERE u.id = ?
+    `
 
-    const [items] = await connection.execute(query, [id]);
-    return items;
+    const [items] = await connection.execute(query, [id])
+    return items
 }
 
 const createVehicle = async (vehicle, id_costumer) => {
-    const { name_vehicle, color, license_plate } = vehicle;
+    const { name_vehicle, color, license_plate } = vehicle
 
     const query = `
         INSERT INTO vehicles(
-            id,
             id_costumer,
             name,
             color,
             license_plate
         ) VALUES (
-            (SELECT MAX(v.id) FROM vehicles v)+1,
             ?, ?, ?, ?
-        );
-    `;
-    const values = [id_costumer, name_vehicle, color, license_plate];
+        )
+    `
+    const values = [id_costumer, name_vehicle, color, license_plate]
     
-    await connection.execute(query, values);
+    await connection.execute(query, values)
 }
 
 const deleteVehicle = async (id) => {
-    const query = "DELETE FROM vehicles WHERE id = ?";
+    const query = "DELETE FROM vehicles WHERE id = ?"
 
-    await connection.execute(query, [id]);
+    await connection.execute(query, [id])
 }
 
 module.exports = {

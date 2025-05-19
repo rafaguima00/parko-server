@@ -44,14 +44,17 @@ const validateBody = async (req, res, next) => {
 }
 
 const validateRequestPut = async (req, res, next) => {
-    const { colaborator, email, tel, e_admin, tipo_contratacao } = req.body
+    const { colaborator, email, tel, cpf, rg, e_admin, tipo_contratacao, password } = req.body
 
     if(
         colaborator === "" ||
         email === "" || 
         tel === "" ||
+        cpf === "" ||
+        rg === "" ||
         e_admin === "" || 
-        tipo_contratacao === "" 
+        tipo_contratacao === "" ||
+        password === ""
     ) {
         return res.status(400).json({ message: "O campo de texto não pode estar vazio" })
     }
@@ -60,8 +63,11 @@ const validateRequestPut = async (req, res, next) => {
         colaborator === undefined ||
         email === undefined || 
         tel === undefined ||
+        cpf === undefined ||
+        rg === undefined ||
         e_admin === undefined || 
-        tipo_contratacao === undefined 
+        tipo_contratacao === undefined ||
+        password === undefined
     ) {
         return res.status(400).json({ message: "Campo de texto obrigatório" })
     }

@@ -13,7 +13,7 @@ const getSelectedDebt = async (req, res) => {
 
 const postDebts = async (req, res) => {
     const postDebt = await model.createDebt(req.body)
-    res.status(201).json(postDebt)
+    res.status(200).json(postDebt)
 }
 
 const deleteDebts = async (req, res) => {
@@ -24,8 +24,8 @@ const deleteDebts = async (req, res) => {
 
 const putDebts = async (req, res) => {
     const id = req.params.id
-    await model.updateDebt(req.body, id)
-    res.status(204).json({})
+    const result = await model.updateDebt(req.body, id)
+    res.status(200).json(result)
 }
 
 module.exports = {

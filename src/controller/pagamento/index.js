@@ -1,5 +1,6 @@
 require("dotenv").config()
 
+const model = require("../../model/pagamento")
 const axios = require("axios")
 const { v4: uuidv4 } = require("uuid")
 
@@ -25,7 +26,7 @@ const pagamento = async (req, res) => {
             id: customer_id
         },
         issuer_id: issuer_id,
-        statement_descriptor: "PARKOESTACIONAMENTOS"
+        statement_descriptor: "PARKO_ESTACIONAMENTOS"
     }
 
     try {
@@ -49,6 +50,18 @@ const pagamento = async (req, res) => {
     }
 }
 
+const getPayment = async (req, res) => {
+    const result = await model.selectPayment(req.params.id)
+    res.status(200).json(result)
+}
+
+const savePaymentOnDB = async (req, res) => {
+    const create = await model.createPayment(req.body)
+    res.status(200).json(create)
+}
+
 module.exports = {
-    pagamento
+    pagamento,
+    getPayment,
+    savePaymentOnDB
 }

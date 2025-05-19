@@ -36,10 +36,12 @@ const middlewares = {
     retiradas: require("../middleware/retiradas")
 }
 
-// Definir rotas
+// Rotas
 const routes = [
     // Pagamento
     { path: "/create_payment", method: "post", handler: controllers.pagamento.pagamento },
+    { path: "/payment-on-db", method: "post", handler: controllers.pagamento.savePaymentOnDB },
+    { path: "/payment/:id", method: "get", handler: controllers.pagamento.getPayment },
 
     //  Ajuda
     { path: "/faq", method: "get", handler: controllers.faq.getFaq },
@@ -129,6 +131,7 @@ const routes = [
 
     // Avaliações
     { path: "/ratings", method: "get", handler: controllers.ratings.getRatings },
+    { path: "/ratings/:id", method: "get", handler: controllers.ratings.getRatingsByIdEstablishment },
     { path: "/ratings", method: "post", handler: controllers.ratings.postRatings },
     { path: "/ratings/:id", method: "delete", handler: controllers.ratings.deleteRatings },
     { path: "/ratings/:id", method: "put", handler: controllers.ratings.putRatings },

@@ -14,6 +14,8 @@ const getColab = async () => {
             c.created_at, 
             c.updated_at,
             c.inicio_contrato,
+            c.e_admin,
+            c.tipo_contratacao,
             t.type_colaborator,
             h.type as tipo_contrato,
             e.name as establishment,
@@ -40,9 +42,11 @@ const getColaboratorById = async (id) => {
             c.data_nasc, 
             c.created_at,
             c.updated_at,  
-            c.inicio_contrato, 
+            c.inicio_contrato,
+            c.e_admin,
+            c.tipo_contratacao,
             t.type_colaborator,
-            h.type as tipo_contratacao,
+            h.type as tipo_contrato,
             e.razao_social, 
             e.name as establishment
         FROM colaborators c
@@ -91,7 +95,7 @@ const deleteColab = async (id) => {
 }
 
 const putColab = async (id, body, hashedPassword) => {
-    const { colaborator, email, tel, e_admin, tipo_contratacao } = body
+    const { colaborator, email, tel, cpf, rg, e_admin, tipo_contratacao } = body
 
     const updatedAt = new Date().toLocaleString()
     const query = `
@@ -101,12 +105,14 @@ const putColab = async (id, body, hashedPassword) => {
             email = ?, 
             password = ?,
             tel = ?, 
+            cpf = ?,
+            rg = ?,
             e_admin = ?, 
             tipo_contratacao = ?, 
             updated_at = ? 
         WHERE id = ?
     `
-    const values = [colaborator, email, hashedPassword, tel, e_admin, tipo_contratacao, updatedAt, id]
+    const values = [colaborator, email, hashedPassword, tel, cpf, rg, e_admin, tipo_contratacao, updatedAt, id]
 
     await connection.execute(query, values)
 }

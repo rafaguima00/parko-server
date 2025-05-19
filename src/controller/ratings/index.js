@@ -6,6 +6,12 @@ const getRatings = async (req, res) => {
     res.status(200).json(result)
 }
 
+const getRatingsByIdEstablishment = async (req, res) => {
+    const result = await model.getRatingsByIdEstablishment(req.params.id)
+
+    res.status(200).json(result)
+}
+
 const postRatings = async (req, res) => {
     const create = await model.createRating(req.body)
     
@@ -28,6 +34,7 @@ const putRatings = async (req, res) => {
 
 module.exports = {
     getRatings,
+    getRatingsByIdEstablishment,
     postRatings,
     deleteRatings,
     putRatings
