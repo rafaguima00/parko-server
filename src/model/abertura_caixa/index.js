@@ -30,6 +30,31 @@ const abrirCaixa = async (body) => {
     const select = "SELECT * FROM abertura_caixa WHERE id_establishment = ?"
 
     const [items] = await connection.execute(select, [id_establishment])
+
+    if(items.length === 0) {
+        const query = `
+            INSERT INTO abertura_caixa (
+                id_establishment,
+                id_colaborator,
+                data_abertura,
+                hora_abertura,
+                data_fechamento,
+                hora_fechamento,
+                valor_abertura,
+                valor_fechamento
+            ) VALUES (?, ?, ?, ?, "", "", 0, 0)
+        `
+        const values = [
+            id_establishment,
+            id_colaborator,
+            dataAbertura,
+            horaAbertura
+        ]
+
+        await connection.execute(query, values)
+        return { message: "Caixa iniciado pela primeira vez." }
+    }
+
     const ultimaAbertura = items[items.length - 1]
     const valorAnteriorDoCaixa = ultimaAbertura.valor_fechamento
 
