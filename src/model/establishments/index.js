@@ -13,6 +13,26 @@ const getEstablishmentById = async (id) => {
     return items
 }
 
+const getNearbyEstablishments = async (body) => {
+    const { user_lat, user_long, radiusKm = 8 } = body
+
+    const query = `
+        SELECT *, (
+            6371 * ACOS(
+                COS(RADIANS(?)) * COS(RADIANS(latitude)) *
+                COS(RADIANS(longitude) - RADIANS(?)) +
+                SIN(RADIANS(?)) * SIN(RADIANS(latitude))
+            )
+        ) AS distance
+        FROM establishments
+        HAVING distance <= ?
+        ORDER BY distance ASC
+    `
+
+    const [items] = await connection.execute(query, [user_lat, user_long, user_lat, radiusKm])
+    return items
+}
+
 const postEstablishment = async (body) => {
 
     const { 
@@ -158,6 +178,7 @@ const putVagasOcupadas = async (id, body) => {
 module.exports = {
     getEstablishment,
     getEstablishmentById,
+    getNearbyEstablishments,
     postEstablishment, 
     deleteEstablishment, 
     patchEstablishment,

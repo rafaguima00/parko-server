@@ -58,6 +58,7 @@ const routes = [
     // Estacionamentos
     { path: "/establishments", method: "get", handler: controllers.estab.getEstablishments },
     { path: "/establishments/:id", method: "get", handler: controllers.estab.getEstablishmentById },
+    { path: "/near-establishments", method: "get", handler: controllers.estab.getNearbyEstablishments },
     { path: "/establishments", method: "post", handler: controllers.estab.createEstablishment },
     { path: "/establishments/:id", method: "delete", handler: controllers.estab.deleteEstablishment },
     { path: "/establishments/:id", method: "put", handler: controllers.estab.updateEstablishment },

@@ -1,5 +1,6 @@
 const connection = require("../model")
 
+// Sempre salvar a data da reserva, entrada e saida no formato DD/MM/YYYY
 const dataFormatada = (date) => {
     if(date.includes("-")) {
         const arrayData = date.split("-")

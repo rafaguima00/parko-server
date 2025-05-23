@@ -11,6 +11,11 @@ const getEstablishmentById = async (req, res) => {
     res.status(200).json(getById)
 }
 
+const getNearbyEstablishments = async (req, res) => {
+    const getNear = await model.getNearbyEstablishments(req.query)
+    res.status(200).json(getNear)
+}
+
 const getColaboratorsByEst = async (req, res) => {
     const id = req.params.id
     const getAll = await model.getEstByColaborator(id)
@@ -46,6 +51,7 @@ const updateVagasOcupadas = async (req, res) => {
 module.exports = {
     getEstablishments,
     getEstablishmentById,
+    getNearbyEstablishments,
     getColaboratorsByEst,
     createEstablishment,
     deleteEstablishment,
