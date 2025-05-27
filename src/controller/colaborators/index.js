@@ -63,7 +63,7 @@ const sendEmail = async (req, res) => {
     const textEmail = `
         <div>
             <p>Clique aqui para recuperar a senha</p>
-            <a href="http://localhost:3000/new-password">Recuperar senha</a>
+            <a href="${process.env.URL_FRONT_END}/new-password">Recuperar senha</a>
         </div>
     `
 
