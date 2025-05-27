@@ -22,8 +22,8 @@ const postColaborators = async (req, res) => {
 }
 
 const loginColaborators = async (req, res) => {
-    if(req.body.email === "" || req.body.password === "") {
-        return res.status(401).json({ message: "The field cannot be empty" })
+    if (req.body.email === "" || req.body.password === "") {
+        return res.status(400).json({ message: "Preencha o campo vazio" })
     }
 
     const email = req.body.email.toLowerCase()
@@ -37,7 +37,7 @@ const loginColaborators = async (req, res) => {
             return res.status(201).json({ token })
         }
         
-        res.status(401).json({ message: "E-mail or password is wrong" })
+        res.status(400).json({ message: "E-mail ou senha não conferem" })
         
     } catch (error) {
         res.status(500).json({ message: "Internal server error" })
