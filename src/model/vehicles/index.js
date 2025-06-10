@@ -33,11 +33,11 @@ const getVehiclesByOwnerId = async (id) => {
     return items
 }
 
-const createVehicle = async (vehicle, id_costumer) => {
-    const { name_vehicle, color, license_plate } = vehicle
+const createVehicle = async (vehicle) => {
+    const { name_vehicle, color, license_plate, id_costumer } = vehicle
 
     const query = `
-        INSERT INTO vehicles(
+        INSERT INTO vehicles (
             id_costumer,
             name,
             color,
@@ -52,6 +52,23 @@ const createVehicle = async (vehicle, id_costumer) => {
 }
 
 const deleteVehicle = async (id) => {
+    const selectPayment = `
+        SELECT * FROM payments WHERE id_vehicle = ?
+    `
+    const selectReservation = `
+        SELECT * FROM reservations WHERE id_vehicle = ?
+    `
+    const [payments] = await connection.execute(selectPayment, [id])
+    const [reservations] = await connection.execute(selectReservation, [id])
+
+    if (payments.length > 0) {
+        await connection.execute("DELETE FROM payments WHERE id_vehicle = ?", [id])
+    }
+
+    if (reservations.length > 0) {
+        await connection.execute("DELETE FROM reservations WHERE id_vehicle = ?", [id])
+    }
+
     const query = "DELETE FROM vehicles WHERE id = ?"
 
     await connection.execute(query, [id])

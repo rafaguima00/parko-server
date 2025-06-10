@@ -117,7 +117,7 @@ const updateDebt = async (debt, idCustomer) => {
         const values = [payment_method, localData, idCustomer]
         const [result] = await connection.execute(update, values)
 
-        if(result.affectedRows === 1) {
+        if(result.affectedRows >= 1) {
             const query = `
                 UPDATE payments SET status = "approved" WHERE id_customer = ?
             `

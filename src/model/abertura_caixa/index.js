@@ -51,6 +51,7 @@ const abrirCaixa = async (body) => {
             horaAbertura
         ]
 
+        // Abre caixa quando é a primeira vez que o estacionamento abre o caixa
         await connection.execute(query, values)
         return { message: "Caixa iniciado pela primeira vez." }
     }
@@ -59,6 +60,7 @@ const abrirCaixa = async (body) => {
     const valorAnteriorDoCaixa = ultimaAbertura.valor_fechamento
 
     if(ultimaAbertura.data_fechamento === dataAbertura) {
+        // Se o caixa estiver fechado e o cliente for reabrir no mesmo dia, fazer a atualização
         const update = `
             UPDATE abertura_caixa SET data_fechamento = "", hora_fechamento = "", aberto = 1 WHERE id = ?
         `
@@ -70,6 +72,7 @@ const abrirCaixa = async (body) => {
         }
     }
 
+    // Abertura de caixa
     const query = `
         INSERT INTO abertura_caixa (
             id_establishment,
