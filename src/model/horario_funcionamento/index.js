@@ -19,12 +19,8 @@ const getOpeningHour = async () => {
 const getOpeningHourByParking = async (id) => {
     const query = `
         SELECT 
-            o.id, 
-            o.id_estacionamento,
-            e.name as nome_estabelecimento,
-            o.dia_semana, 
-            o.hora_abertura, 
-            o.hora_fechamento
+            o.*,
+            e.name as nome_estabelecimento
         FROM opening_hour o
         INNER JOIN establishments e ON e.id = o.id_estacionamento
         WHERE o.id_estacionamento = ?
@@ -36,7 +32,7 @@ const getOpeningHourByParking = async (id) => {
 
 const postOpeningHour = async (body) => {
     
-    for(const openingHour of body) {
+    for (const openingHour of body) {
 
         const { id_estacionamento, dia_semana, hora_abertura, hora_fechamento } = openingHour
     
@@ -57,13 +53,19 @@ const postOpeningHour = async (body) => {
 
 const updateOpeningHour = async (body, idEstacionamento) => {
 
-    for(const openingHour of body) {
-        const { hora_abertura, hora_fechamento, dia_semana } = openingHour
+    for (const openingHour of body) {
+        const { id, hora_abertura, hora_fechamento, closed } = openingHour
     
         const query = `
-            UPDATE opening_hour SET hora_abertura = ?, hora_fechamento = ? WHERE id_estacionamento = ? AND dia_semana = ?
+            UPDATE opening_hour SET hora_abertura = ?, hora_fechamento = ?, closed = ? WHERE id = ? AND id_estacionamento = ?
         `
-        const values = [hora_abertura, hora_fechamento, idEstacionamento, dia_semana]
+        const values = [
+            hora_abertura, 
+            hora_fechamento, 
+            closed, 
+            id, 
+            idEstacionamento
+        ]
     
         await connection.execute(query, values)
     }

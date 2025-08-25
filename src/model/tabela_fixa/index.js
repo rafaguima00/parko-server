@@ -1,21 +1,22 @@
 const connection = require("../model")
 
 const getTabelaFixa = async (id) => {
-    const query = "SELECT * FROM tabela_fixa"
+    const query = "SELECT * FROM tabela_fixa ORDER BY value"
     const [items] = await connection.execute(query, [id])
 
     return items
 }
 
 const getTabelaFixaById = async (id) => {
-    const query = "SELECT * FROM tabela_fixa WHERE id_establishment = ?"
+    const query = "SELECT * FROM tabela_fixa WHERE id_establishment = ? ORDER BY value"
     const [items] = await connection.execute(query, [id])
 
     return items
 }
 
 const createTabelaFixa = async (body) => {
-    for(const tabelaFixa of body) {
+    for (const tabelaFixa of body) {
+
         const { id_establishment, primeira_hora, segunda_hora, value } = tabelaFixa
     
         const query = `
@@ -24,7 +25,7 @@ const createTabelaFixa = async (body) => {
                 primeira_hora,
                 segunda_hora,
                 value
-            ) VALUES(
+            ) VALUES (
                 ?, ?, ?, ?
             )
         `
@@ -35,8 +36,10 @@ const createTabelaFixa = async (body) => {
 }
 
 const updateTabelaFixa = async (body, idEstacionamento) => {
-    for(const tabelaFixa of body) {
+    for (const tabelaFixa of body) {
+
         const { id, primeira_hora, segunda_hora, value } = tabelaFixa
+        
         const query = `
             UPDATE tabela_fixa SET primeira_hora = ?, segunda_hora = ?, value = ? WHERE id = ? AND id_establishment = ?
         `
@@ -46,9 +49,15 @@ const updateTabelaFixa = async (body, idEstacionamento) => {
     }
 }
 
-const deleteTabelaFixa = async (id) => {
-    const query = "DELETE FROM tabela_fixa WHERE id = ?"
-    await connection.execute(query, [id])
+const deleteTabelaFixa = async (body) => {
+
+    for (const tabelaFixa of body) {
+
+        const { id } = tabelaFixa
+
+        const query = "DELETE FROM tabela_fixa WHERE id = ?"
+        await connection.execute(query, [id])
+    }
 }
 
 module.exports = {

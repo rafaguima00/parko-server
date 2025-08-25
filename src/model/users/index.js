@@ -5,13 +5,17 @@ const getUsers = async () => {
     return items
 }
 
+const getUserById = async (id) => {
+    const [items] = await connection.execute("SELECT * FROM users WHERE id = ?", [id])
+    return items
+}
+
 const postUsers = async (body, hashedPassword) => {
     const { name_user, email, cpf, rg, tel, data_nasc } = body
     const createdAt = new Date().toLocaleString()
 
     const query = `
         INSERT INTO users (
-            id,
             name, 
             password,
             email, 
@@ -20,13 +24,17 @@ const postUsers = async (body, hashedPassword) => {
             tel, 
             data_nasc, 
             created_at
-        ) VALUES(
-            (SELECT MAX(u.id) FROM users u)+1,
+        ) VALUES (
             ?, ?, ?, ?, ?, ?, ?, ?
         )
     `
     const values = [name_user, hashedPassword, email, cpf, rg, tel, data_nasc, createdAt]
-    await connection.execute(query, values)
+    const result = await connection.execute(query, values)
+
+    if (result[0].affectedRows === 1) {
+        const [items] = await connection.execute("SELECT * FROM users WHERE id = ?", [result[0].insertId])
+        return items[0]
+    }
 }
 
 const deleteUsers = async (id) => {
@@ -74,6 +82,7 @@ const updateUsers = async (body, id) => {
 
 module.exports = {
     getUsers,
+    getUserById,
     postUsers,
     deleteUsers,
     updateUsers

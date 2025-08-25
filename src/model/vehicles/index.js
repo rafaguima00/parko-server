@@ -46,9 +46,13 @@ const createVehicle = async (vehicle) => {
             ?, ?, ?, ?
         )
     `
-    const values = [id_costumer, name_vehicle, color, license_plate]
-    
-    await connection.execute(query, values)
+    const values = [id_costumer, name_vehicle, color, license_plate] 
+    const result = await connection.execute(query, values)
+
+    if (result[0].affectedRows === 1) {
+        const [items] = await connection.execute("SELECT * FROM vehicles WHERE id = ?", [result[0].insertId])
+        return items[0]
+    }
 }
 
 const deleteVehicle = async (id) => {

@@ -9,6 +9,11 @@ const getUsers = async (req, res) => {
     res.status(200).json(getAllUsers)
 }
 
+const getUserById = async (req, res) => {
+    const getUser = await model.getUserById(req.params.id)
+    res.status(200).json(getUser)
+}
+
 const postUsers = async (req, res) => {
     try {
         if(req.body.password === "") {
@@ -16,12 +21,12 @@ const postUsers = async (req, res) => {
             const hashedPassword = await bcrypt.hash(randomPassword.toString(), 10)
             const create = await model.postUsers(req.body, hashedPassword)
             
-            res.status(201).json(create)
+            res.status(200).json(create)
         } else {
             const hashedPassword = await bcrypt.hash(req.body.password, 10)
             const createUser = await model.postUsers(req.body, hashedPassword)
     
-            res.status(201).json(createUser)
+            res.status(200).json(createUser)
         }
         
     } catch (error) {
@@ -37,7 +42,6 @@ const deleteUsers = async (req, res) => {
 
 const putUsers = async (req, res) => {
     const id = req.params.id
-    //const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
     await model.updateUsers(req.body, id)
     return res.status(204).json({})
@@ -49,11 +53,11 @@ const loginUsers = async (req, res) => {
     const findUser = allUsers.find(item => item.email.toLowerCase() === email)
 
     try {
-        if(!findUser) {
+        if (!findUser) {
             return res.status(401).json({ message: "E-mail ou senha incorretos" })
         }
 
-        if(await bcrypt.compare(req.body.password, findUser.password)) {
+        if (await bcrypt.compare(req.body.password, findUser.password)) {
             const token = jwt.sign({ user: findUser }, process.env.PRIVATE_KEY, { expiresIn: 1800 })
     
             res.status(201).json({ token })
@@ -68,6 +72,7 @@ const loginUsers = async (req, res) => {
 
 module.exports = {
     getUsers,
+    getUserById,
     postUsers,
     deleteUsers,
     putUsers,

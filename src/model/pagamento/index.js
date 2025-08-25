@@ -25,8 +25,8 @@ const createPayment = async (body) => {
             status 
         } = payment
     
-        const dataDoDia = new Date().toLocaleDateString()
-        const hora = new Date().toLocaleTimeString()
+        const dataDoDia = new Date().toLocaleDateString("pt-br")
+        const hora = new Date().toLocaleTimeString("pt-br")
     
         const query = `
             INSERT INTO payments (
@@ -61,10 +61,6 @@ const createPayment = async (body) => {
         ]
     
         await connection.execute(query, values)
-
-        if(payment_method === "debit") {
-            
-        }
     }
 }
 

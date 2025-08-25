@@ -3,7 +3,7 @@ const model = require("../../model/tabela_fixa")
 const getTabelaFixa = async (req, res) => {
     const id = req.params.id
 
-    if(id) {
+    if (id) {
         const getById = await model.getTabelaFixaById(id)
         res.status(200).json(getById)
         return
@@ -25,8 +25,7 @@ const putTabelaFixa = async (req, res) => {
 }
 
 const deleteTabelaFixa = async (req, res) => {
-    const id = req.params.id
-    await model.deleteTabelaFixa(id)
+    await model.deleteTabelaFixa(req.body)
     res.status(204).json({})
 }
 

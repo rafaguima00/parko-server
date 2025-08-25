@@ -48,6 +48,13 @@ const updateVagasOcupadas = async (req, res) => {
     res.status(204).json({})
 }
 
+const updateTypeOfCharge = async (req, res) => {
+    const id = req.params.id
+    await model.updateTypeOfCharge(id, req.body)
+
+    res.status(204).json({})
+}
+
 module.exports = {
     getEstablishments,
     getEstablishmentById,
@@ -56,5 +63,6 @@ module.exports = {
     createEstablishment,
     deleteEstablishment,
     updateEstablishment,
-    updateVagasOcupadas
+    updateVagasOcupadas,
+    updateTypeOfCharge
 }

@@ -63,6 +63,9 @@ const routes = [
     { path: "/establishments/:id", method: "delete", handler: controllers.estab.deleteEstablishment },
     { path: "/establishments/:id", method: "put", handler: controllers.estab.updateEstablishment },
 
+    // Tipo de cobrança
+    { path: "/charge-establishment/:id", method: "put", handler: controllers.estab.updateTypeOfCharge },
+
     // Vagas ocupadas no estacionamento
     { path: "/vagas_ocupadas/:id", method: "put", handler: controllers.estab.updateVagasOcupadas },
 
@@ -84,7 +87,7 @@ const routes = [
     { path: "/tabela_fixa/:id", method: "get", handler: controllers.tabelaFixa.getTabelaFixa },
     { path: "/tabela_fixa/", method: "post", handler: controllers.tabelaFixa.postTabelaFixa },
     { path: "/tabela_fixa/:id", method: "put", handler: controllers.tabelaFixa.putTabelaFixa },
-    { path: "/tabela_fixa/:id", method: "delete", handler: controllers.tabelaFixa.deleteTabelaFixa },
+    { path: "/tabela_fixa", method: "delete", handler: controllers.tabelaFixa.deleteTabelaFixa },
 
     // Reservas
     { path: "/reservations", method: "get", handler: controllers.reserv.getReservations },
@@ -107,9 +110,10 @@ const routes = [
 
     // Usuários B2C
     { path: "/users", method: "get", handler: controllers.users.getUsers },
+    { path: "/users/:id", method: "get", handler: controllers.users.getUserById },
     { path: "/users", method: "post", middleware: middlewares.users.validateBody, handler: controllers.users.postUsers },
     { path: "/users/:id", method: "delete", handler: controllers.users.deleteUsers },
-    { path: "/users/:id", method: "put", middleware: middlewares.users.updateBody, handler: controllers.users.putUsers },
+    { path: "/users/:id", method: "put", handler: controllers.users.putUsers },
     { path: "/users/login", method: "post", handler: controllers.users.loginUsers },
 
     // Favoritos

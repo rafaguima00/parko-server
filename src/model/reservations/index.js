@@ -2,7 +2,7 @@ const connection = require("../model")
 
 // Sempre salvar a data da reserva, entrada e saida no formato DD/MM/YYYY
 const dataFormatada = (date) => {
-    if(date.includes("-")) {
+    if (date.includes("-")) {
         const arrayData = date.split("-")
 
         if(arrayData[0].length == 4) {
@@ -12,7 +12,7 @@ const dataFormatada = (date) => {
         return `${arrayData[0]}/${arrayData[1]}/${arrayData[2]}`
     }
 
-    if(date === "") return ""
+    if (date === "") return ""
 
     return date
 }
@@ -42,7 +42,8 @@ const getReservation = async () => {
             r.id_establishment,
             e.name as establishment,
             e.image as image_url_establishment,
-            r.rated
+            r.rated,
+            r.type_of_charge
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -78,7 +79,8 @@ const getReservationById = async (id) => {
             r.id_establishment,
             e.name as establishment,
             e.image as image_url_establishment,
-            r.rated
+            r.rated,
+            r.type_of_charge
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -114,7 +116,8 @@ const getReservByParkingId = async (id) => {
             r.id_establishment,
             e.name as establishment,
             e.image as image_url_establishment,
-            r.rated
+            r.rated,
+            r.type_of_charge
         FROM reservations r
         INNER JOIN users u ON u.id = r.id_costumer 
         INNER JOIN status_reservation s ON s.id = r.status_reservation
@@ -126,8 +129,8 @@ const getReservByParkingId = async (id) => {
     return items
 }
 const postReservation = async (body) => {
-    const hora = new Date().toLocaleTimeString()
-    const dia = new Date().toLocaleDateString()
+    const hora = new Date().toLocaleTimeString("pt-br")
+    const dia = new Date().toLocaleDateString("pt-br")
 
     const { 
         data_entrada,
@@ -155,8 +158,9 @@ const postReservation = async (body) => {
             status_reservation,
             id_vehicle,
             id_establishment,
-            parko_app
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            parko_app,
+            type_of_charge
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT type_of_charge FROM establishments WHERE id = ?))
     `
 
     const values = [
@@ -170,7 +174,8 @@ const postReservation = async (body) => {
         status_reservation,
         id_vehicle,
         id_establishment,
-        parko_app
+        parko_app,
+        id_establishment
     ]
 
     const [result] = await connection.execute(query, values)

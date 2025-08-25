@@ -15,4 +15,4 @@ app.use(cors({
 app.use(express.json())
 app.use("/api", router)
 
-app.listen(PORT, '0.0.0.0')
+app.listen(PORT)

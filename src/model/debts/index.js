@@ -3,8 +3,7 @@ const connection = require("../model")
 const getDebts = async () => {
     const query = `
         SELECT 
-            d.id,
-            d.value,
+            d.*,
             u.id as id_costumer,
             u.name as costumer,
             id_establishment,
@@ -39,7 +38,7 @@ const getDebtsByOwnerId = async (id) => {
 }
 
 const createDebt = async (debt) => {
-    const { value, id_costumer, id_establishment } = debt
+    const { value, id_costumer, id_establishment, id_reservation } = debt
 
     const localData = new Date().toLocaleString()
 
@@ -48,7 +47,7 @@ const createDebt = async (debt) => {
     `
     const [items] = await connection.execute(select, [id_costumer])
 
-    if(items.length >= 1) {
+    if (items.length >= 1) {
         const query = `
             UPDATE debts SET value = value + ?, date_updated = ? WHERE id_costumer = ? AND status = 1
         `
@@ -61,14 +60,15 @@ const createDebt = async (debt) => {
         INSERT INTO debts(
             value, 
             id_costumer, 
-            id_establishment, 
+            id_establishment,
+            id_reservation,
             status,
             date_created
         ) VALUES (
-            ?, ?, ?, 1, ?
+            ?, ?, ?, ?, 1, ?
         )
     `
-    const values = [value, id_costumer, id_establishment, localData]
+    const values = [value, id_costumer, id_establishment, id_reservation, localData]
 
     await connection.execute(query, values)
 }
@@ -86,7 +86,7 @@ const updateDebt = async (debt, idCustomer) => {
     const selectItem = `SELECT * FROM debts WHERE id_costumer = ? AND status = 1`
     const [items] = await connection.execute(selectItem, [idCustomer])
 
-    if(value < items[0].value) {
+    if (value < items[0].value) {
         const query = `
             UPDATE debts SET value = ?, date_updated = ? WHERE id_costumer = ? AND status = 1
         `
@@ -94,7 +94,7 @@ const updateDebt = async (debt, idCustomer) => {
 
         const [result] = await connection.execute(query, values)
 
-        if(result.affectedRows === 1) {
+        if (result.affectedRows === 1) {
             const query = `
                 INSERT INTO debts (
                     id_costumer, id_establishment, value, status, payment_method, date_created
@@ -103,27 +103,27 @@ const updateDebt = async (debt, idCustomer) => {
             const values = [idCustomer, id_establishment, value, payment_method, localData]
             const [result] =  await connection.execute(query, values)
 
-            if(result.affectedRows >= 1) {
+            if (result.affectedRows >= 1) {
                 const [items] = await connection.execute(`SELECT * FROM debts WHERE id_establishment = ?`, [id_establishment])
                 return items
             }
         }
     }
 
-    if(value === items[0].value) {
+    if (value === items[0].value) {
         const update = `
             UPDATE debts SET payment_method = ?, date_updated = ?, status = 2 WHERE id_costumer = ? AND status = 1
         `
         const values = [payment_method, localData, idCustomer]
         const [result] = await connection.execute(update, values)
 
-        if(result.affectedRows >= 1) {
+        if (result.affectedRows >= 1) {
             const query = `
                 UPDATE payments SET status = "approved" WHERE id_customer = ?
             `
             const [result] = await connection.execute(query, [idCustomer])
 
-            if(result.affectedRows >= 1) {
+            if (result.affectedRows >= 1) {
                 const [items] = await connection.execute(`SELECT * FROM debts WHERE id_establishment = ?`, [id_establishment])
                 return items
             }

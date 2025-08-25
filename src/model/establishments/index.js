@@ -175,6 +175,15 @@ const putVagasOcupadas = async (id, body) => {
     await connection.execute(query, values)
 }
 
+const updateTypeOfCharge = async (id, body) => {
+    const { type_of_charge } = body
+
+    const query = "UPDATE establishments SET type_of_charge = ? WHERE id = ?"
+    const values = [type_of_charge, id]
+
+    await connection.execute(query, values)
+}
+
 module.exports = {
     getEstablishment,
     getEstablishmentById,
@@ -182,5 +191,6 @@ module.exports = {
     postEstablishment, 
     deleteEstablishment, 
     patchEstablishment,
-    putVagasOcupadas
+    putVagasOcupadas,
+    updateTypeOfCharge
 }
