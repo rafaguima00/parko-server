@@ -110,7 +110,7 @@ const updateCaixa = async (id, body) => {
             data_fechamento = ?,
             hora_fechamento = ?,
             aberto = ?
-        WHERE id = ?;
+        WHERE id = ?
     `
     const values = [valor_fechamento, dataFechamento, horaFechamento, aberto, id]
 

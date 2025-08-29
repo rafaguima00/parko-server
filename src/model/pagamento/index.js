@@ -22,7 +22,10 @@ const createPayment = async (body) => {
             id_payment,
             card_brand,
             id_reservation, 
-            status 
+            status,
+            value_paid,
+            change_to_pay,
+            change_paid
         } = payment
     
         const dataDoDia = new Date().toLocaleDateString("pt-br")
@@ -40,9 +43,12 @@ const createPayment = async (body) => {
                 id_payment,
                 card_brand,
                 id_reservation, 
-                status
+                status,
+                value_paid,
+                change_to_pay,
+                change_paid
             ) VALUES (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
             )
         `
     
@@ -57,7 +63,10 @@ const createPayment = async (body) => {
             id_payment ? id_payment : "",
             card_brand ? card_brand : "",
             id_reservation, 
-            status
+            status,
+            value_paid,
+            change_to_pay,
+            change_paid
         ]
     
         await connection.execute(query, values)

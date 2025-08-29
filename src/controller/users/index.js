@@ -54,7 +54,7 @@ const loginUsers = async (req, res) => {
 
     try {
         if (!findUser) {
-            return res.status(401).json({ message: "E-mail ou senha incorretos" })
+            return res.status(400).json({ message: "E-mail ou senha incorretos" })
         }
 
         if (await bcrypt.compare(req.body.password, findUser.password)) {
@@ -62,7 +62,7 @@ const loginUsers = async (req, res) => {
     
             res.status(201).json({ token })
         } else {
-            return res.status(401).json({ message: "E-mail ou senha incorretos" })
+            return res.status(400).json({ message: "E-mail ou senha incorretos" })
         }
     } catch (error) {
         console.error(error)
