@@ -241,7 +241,7 @@ const putReservation = async (body, id) => {
 
     const [result] = await connection.execute(query, values)
 
-    if(result.affectedRows === 1) {
+    if (result.affectedRows === 1) {
 
         if (status === 4) {
             const updateQuery = `

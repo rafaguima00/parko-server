@@ -33,6 +33,8 @@ const getNearbyEstablishments = async (body) => {
     return items
 }
 
+// Ao criar um estacionamento, automaticamente, criar tabela de preço, 
+// tabela fixa e horário de funcionamento do estacionamento
 const postEstablishment = async (body) => {
 
     const { 
@@ -79,15 +81,15 @@ const postEstablishment = async (body) => {
     
     const values = [
         razao_social, 
-        name, 
+        name,
         contato, 
         cnpj, 
         inscricao_estadual, 
         inscricao_municipal, 
-        end, 
-        cep, 
-        estado, 
-        cidade, 
+        end,
+        cep,
+        estado,
+        cidade,
         bairro,
         longitude, 
         latitude,

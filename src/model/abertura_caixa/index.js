@@ -31,7 +31,7 @@ const abrirCaixa = async (body) => {
 
     const [items] = await connection.execute(select, [id_establishment])
 
-    if(items.length === 0) {
+    if (items.length === 0) {
         const query = `
             INSERT INTO abertura_caixa (
                 id_establishment,
@@ -59,14 +59,14 @@ const abrirCaixa = async (body) => {
     const ultimaAbertura = items[items.length - 1]
     const valorAnteriorDoCaixa = ultimaAbertura.valor_fechamento
 
-    if(ultimaAbertura.data_fechamento === dataAbertura) {
+    if (ultimaAbertura.data_fechamento === dataAbertura) {
         // Se o caixa estiver fechado e o cliente for reabrir no mesmo dia, fazer a atualização
         const update = `
             UPDATE abertura_caixa SET data_fechamento = "", hora_fechamento = "", aberto = 1 WHERE id = ?
         `
         const [result] = await connection.execute(update, [ultimaAbertura.id])
 
-        if(result.affectedRows === 1) {
+        if (result.affectedRows === 1) {
             const [items] = await connection.execute("SELECT * FROM abertura_caixa WHERE id = ?", [ultimaAbertura.id])
             return items
         }

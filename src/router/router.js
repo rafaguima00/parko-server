@@ -182,7 +182,7 @@ const routes = [
 ]
 
 routes.forEach(route => {
-    if(route.middleware) {
+    if (route.middleware) {
         router[route.method](route.path, route.middleware, route.handler)
     } else {
         router[route.method](route.path, route.handler)
