@@ -43,6 +43,7 @@ cd backend-parko
 
 # Instale as dependências
 npm install
+```
 
 ## Banco de dados
 
