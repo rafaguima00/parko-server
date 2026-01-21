@@ -34,6 +34,7 @@ Antes de começar, você vai precisar ter instalado:
 
 ## Instalação
 
+```bash
 # Clone o repositório
 git clone https://github.com/seu-usuario/seu-repositorio.git
 
@@ -42,3 +43,26 @@ cd backend-parko
 
 # Instale as dependências
 npm install
+
+## Banco de dados
+
+Por razões de segurança, este projeto **não inclui o banco de dados de produção**.
+
+Para executar localmente:
+- Crie um banco MySQL local
+- Configure as variáveis de ambiente
+- Opcionalmente utilize dados fictícios para testes
+
+Para executar a aplicação localmente, siga os passos abaixo:
+
+### 1- Crie um banco de dados MySQL
+mysql -u root -p -e "CREATE DATABASE parko_db;"
+
+### 2- Crie a estrutura das tabelas
+mysql -u root -p parko_db < database/schema.sql
+
+### 3- Criar dados fictícios
+mysql -u root -p parko_db < database/seed.sql
+
+# Rodar no ambiente de desenvolvimento
+npm run dev
