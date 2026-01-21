@@ -25,7 +25,7 @@ O deploy do servidor é realizado na plataforma **Railway**, onde as credenciais
 ---
 
 ## Pré-requisitos
-Antes de começar, você vai precisar ter instalado:
+Antes de começar, você vai precisar ter instalado: 
 - Node.js (versão recomendada: >= 18)
 - MySQL
 - npm ou yarn
@@ -36,7 +36,7 @@ Antes de começar, você vai precisar ter instalado:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/seu-repositorio.git
+git clone https://github.com/rafaguima00/parko-server.git
 
 # Acesse a pasta do projeto
 cd backend-parko
