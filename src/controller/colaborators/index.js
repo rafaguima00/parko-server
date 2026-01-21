@@ -68,16 +68,16 @@ const sendEmail = async (req, res) => {
     `
 
     const transport = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
+        host: "live.smtp.mailtrap.io",
+        port: 587,
         auth: {
-          user: "329f4273a6fb81",
-          pass: "50ca71f9056cdc"
+          user: "api",
+          pass: process.env.API_TOKEN
         }
     })
 
     transport.sendMail({
-        from: "Parko <suporte@parko.com.br>",
+        from: "Parko <suporte@demomailtrap.com>",
         to: email,
         subject: "Reset de senha - Parko app",
         html: textEmail
@@ -85,8 +85,8 @@ const sendEmail = async (req, res) => {
     .then(() => {
         return res.status(200).json({ message: "E-mail enviado" })
     })
-    .catch(() => {
-        return res.status(400).json({ message: "Erro ao enviar e-mail" })
+    .catch(e => {
+        return res.status(400).json({ message: "Erro ao enviar e-mail", error: e.message })
     })
 }
 

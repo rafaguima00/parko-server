@@ -3,7 +3,7 @@ const model = require("../../model/colaborators")
 const validateBody = async (req, res, next) => {
     const { colaborator, email, cpf, rg, tel, data_nasc, inicio_contrato } = req.body
     
-    if(
+    if (
         colaborator === "" ||
         email === "" ||
         cpf === "" ||
@@ -15,7 +15,7 @@ const validateBody = async (req, res, next) => {
         return res.status(400).json({ message: "O campo de texto não pode estar vazio" })
     }
 
-    if(
+    if (
         colaborator === undefined ||
         email === undefined ||
         cpf === undefined ||
@@ -32,11 +32,11 @@ const validateBody = async (req, res, next) => {
     const emailExists = getAll.find(item => item.email == email)
     const cpfExists = getAll.find(item => item.cpf == cpf)
 
-    if(emailExists) return res.status(400).json({ 
+    if (emailExists) return res.status(400).json({ 
         message: "Este e-mail já está em uso" 
     })
 
-    if(cpfExists) return res.status(400).json({ 
+    if (cpfExists) return res.status(400).json({ 
         message: "Este CPF já está em uso" 
     })
 
@@ -46,7 +46,7 @@ const validateBody = async (req, res, next) => {
 const validateRequestPut = async (req, res, next) => {
     const { colaborator, email, tel, cpf, rg, e_admin, tipo_contratacao, password } = req.body
 
-    if(
+    if (
         colaborator === "" ||
         email === "" || 
         tel === "" ||
@@ -59,7 +59,7 @@ const validateRequestPut = async (req, res, next) => {
         return res.status(400).json({ message: "O campo de texto não pode estar vazio" })
     }
 
-    if(
+    if (
         colaborator === undefined ||
         email === undefined || 
         tel === undefined ||
@@ -80,11 +80,11 @@ const verifyEmail = async (req, res, next) => {
     const getAll = await model.getColab()
     const emailExists = getAll.find(item => item.email == email)
 
-    if(email === "") {
+    if (email === "") {
         return res.status(400).json({ message: "Insira um e-mail válido" })
     }
 
-    if(emailExists) {
+    if (emailExists) {
         return next()
     }
     
@@ -94,11 +94,11 @@ const verifyEmail = async (req, res, next) => {
 const validatePassword = async (req, res, next) => {
     const { password, confirmPassword } = req.body
 
-    if(password === "" || confirmPassword === "") {
+    if (password === "" || confirmPassword === "") {
         return res.status(400).json({ message: "Preencha o campo vazio" })
     }
 
-    if(password !== confirmPassword) {
+    if (password !== confirmPassword) {
         return res.status(401).json({ message: "As senhas devem ser iguais" })
     }
 
