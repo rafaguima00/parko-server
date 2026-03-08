@@ -50,7 +50,7 @@ const updatePriceTable = async (body, idEstacionamento) => {
 
     const update = await connection.execute(query, values)
 
-    if(update) {
+    if (update) {
         const updatedAt = new Date().toLocaleString()
 
         const query = `

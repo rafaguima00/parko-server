@@ -19,6 +19,13 @@ const getReservByParkingId = async (req, res) => {
     res.status(200).json(result)
 }
 
+const getReservByUserId = async (req, res) => {
+    const id = req.params.id
+
+    const result = await model.getReservationByUserId(id)
+    res.status(200).json(result)
+}
+
 const postReservations = async (req, res) => {
     const create = await model.postReservation(req.body)
     res.status(200).json(create)
@@ -45,6 +52,7 @@ module.exports = {
     getReservations,
     getReservationById,
     getReservByParkingId,
+    getReservByUserId,
     postReservations,
     deleteReservation,
     updateReservation,

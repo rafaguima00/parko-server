@@ -10,7 +10,15 @@ const getPriceTableById = async (req, res) => {
     const id = req.params.id
     const result = await model.getPriceTableById(id)
 
-    res.status(200).json(result)
+    try {
+        res.status(200).json(result)
+    } catch (error) {
+        if (result.length === 0) {
+            return res.status(401).json({
+                message: "Erro ao carregar preços"
+            })
+        }
+    }
 }
 
 const postPriceTable = async (req, res) => {

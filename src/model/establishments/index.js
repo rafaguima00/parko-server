@@ -14,7 +14,7 @@ const getEstablishmentById = async (id) => {
 }
 
 const getNearbyEstablishments = async (body) => {
-    const { user_lat, user_long, radiusKm = 8 } = body
+    const { user_lat, user_long, radius } = body
 
     const query = `
         SELECT *, (
@@ -29,7 +29,7 @@ const getNearbyEstablishments = async (body) => {
         ORDER BY distance ASC
     `
 
-    const [items] = await connection.execute(query, [user_lat, user_long, user_lat, radiusKm])
+    const [items] = await connection.execute(query, [user_lat, user_long, user_lat, radius])
     return items
 }
 

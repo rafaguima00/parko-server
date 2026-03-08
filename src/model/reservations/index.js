@@ -128,6 +128,44 @@ const getReservByParkingId = async (id) => {
     const [items] = await connection.execute(query, [id])
     return items
 }
+
+const getReservationByUserId = async (id) => {
+    const query = `
+            SELECT 
+                r.id, 
+                r.data_reserva, 
+                r.hora_reserva,
+                r.data_entrada,
+                r.hora_entrada,
+                r.data_saida, 
+                r.hora_saida,
+                r.value,
+                r.parko_app,
+                u.id as id_costumer,
+                u.name,
+                u.email, 
+                u.tel,
+                s.status,
+                v.id as id_vehicle,
+                v.name as name_vehicle,
+                v.color,
+                v.license_plate,
+                r.id_establishment,
+                e.name as establishment,
+                e.image as image_url_establishment,
+                r.rated,
+                r.type_of_charge
+            FROM reservations r
+            INNER JOIN users u ON u.id = r.id_costumer 
+            INNER JOIN status_reservation s ON s.id = r.status_reservation
+            INNER JOIN vehicles v ON v.id = r.id_vehicle
+            INNER JOIN establishments e ON e.id = r.id_establishment
+            WHERE u.id = ?
+        `
+        const [items] = await connection.execute(query, [id])
+        return items
+}
+
 const postReservation = async (body) => {
     const hora = new Date().toLocaleTimeString("pt-br")
     const dia = new Date().toLocaleDateString("pt-br")
@@ -272,6 +310,7 @@ module.exports = {
     getReservation, 
     getReservationById,
     getReservByParkingId,
+    getReservationByUserId,
     postReservation, 
     deleteReservation, 
     putReservation,

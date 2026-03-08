@@ -60,10 +60,11 @@ const loginUsers = async (req, res) => {
         if (await bcrypt.compare(req.body.password, findUser.password)) {
             const token = jwt.sign({ user: findUser }, process.env.PRIVATE_KEY, { expiresIn: 1800 })
     
-            res.status(201).json({ token })
-        } else {
-            return res.status(400).json({ message: "E-mail ou senha incorretos" })
+            return res.status(201).json({ token })
         }
+        
+        return res.status(400).json({ message: "Erro ao realizar login" })
+        
     } catch (error) {
         console.error(error)
         res.status(500).json({ message: "Internal server error" })

@@ -58,7 +58,7 @@ const routes = [
     // Estacionamentos
     { path: "/establishments", method: "get", handler: controllers.estab.getEstablishments },
     { path: "/establishments/:id", method: "get", handler: controllers.estab.getEstablishmentById },
-    { path: "/near-establishments", method: "get", handler: controllers.estab.getNearbyEstablishments },
+    { path: "/search-establishments", method: "get", handler: controllers.estab.getNearbyEstablishments },
     { path: "/establishments", method: "post", handler: controllers.estab.createEstablishment },
     { path: "/establishments/:id", method: "delete", handler: controllers.estab.deleteEstablishment },
     { path: "/establishments/:id", method: "put", handler: controllers.estab.updateEstablishment },
@@ -93,6 +93,7 @@ const routes = [
     { path: "/reservations", method: "get", handler: controllers.reserv.getReservations },
     { path: "/reservations/:id", method: "get", handler: controllers.reserv.getReservationById },
     { path: "/reservations/parking/:id", method: "get", handler: controllers.reserv.getReservByParkingId },
+    { path: "/reservations/user/:id", method: "get", handler: controllers.reserv.getReservByUserId },
     { path: "/reservations", method: "post", handler: controllers.reserv.postReservations },
     { path: "/reservations/:id", method: "delete", handler: controllers.reserv.deleteReservation },
     { path: "/reservations/:id", method: "put", handler: controllers.reserv.updateReservation },
@@ -182,11 +183,20 @@ const routes = [
 ]
 
 routes.forEach(route => {
-    if (route.middleware) {
-        router[route.method](route.path, route.middleware, route.handler)
-    } else {
-        router[route.method](route.path, route.handler)
+    if (!router[route.method]) {
+        console.error("Método HTTP inválido:", route.method, route.path)
     }
+
+    if (!route.handler) {
+        console.error("Handler undefined:", route.method, route.path)
+    }
+
+    if (route.middleware) {
+        return router[route.method](route.path, route.middleware, route.handler)
+    } 
+        
+    return router[route.method](route.path, route.handler)
+    
 })
 
 module.exports = router

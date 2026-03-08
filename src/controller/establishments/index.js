@@ -13,6 +13,7 @@ const getEstablishmentById = async (req, res) => {
 
 const getNearbyEstablishments = async (req, res) => {
     const getNear = await model.getNearbyEstablishments(req.query)
+
     res.status(200).json(getNear)
 }
 
