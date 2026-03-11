@@ -22,7 +22,7 @@ const getAberturaCxByPark = async (id) => {
 }
 
 const abrirCaixa = async (body) => {
-    const { id_establishment, id_colaborator } = body
+    const { id_establishment, id_colaborator, valor_abertura } = body
     
     const dataAbertura = new Date().toLocaleDateString("pt-br")
     const horaAbertura = new Date().toLocaleTimeString("pt-br")
@@ -32,6 +32,7 @@ const abrirCaixa = async (body) => {
     const [items] = await connection.execute(select, [id_establishment])
 
     if (items.length === 0) {
+        // Abre caixa quando é a primeira vez que o estacionamento é inaugurado
         const query = `
             INSERT INTO abertura_caixa (
                 id_establishment,
@@ -51,7 +52,6 @@ const abrirCaixa = async (body) => {
             horaAbertura
         ]
 
-        // Abre caixa quando é a primeira vez que o estacionamento abre o caixa
         await connection.execute(query, values)
         return { message: "Caixa iniciado pela primeira vez." }
     }
@@ -62,9 +62,17 @@ const abrirCaixa = async (body) => {
     if (ultimaAbertura.data_fechamento === dataAbertura) {
         // Se o caixa estiver fechado e o cliente for reabrir no mesmo dia, fazer a atualização
         const update = `
-            UPDATE abertura_caixa SET data_fechamento = "", hora_fechamento = "", aberto = 1 WHERE id = ?
+            UPDATE 
+                abertura_caixa 
+            SET 
+                data_fechamento = "", 
+                hora_fechamento = "", 
+                aberto = 1, 
+                valor_abertura = ?, 
+                valor_fechamento = ? 
+            WHERE id = ?
         `
-        const [result] = await connection.execute(update, [ultimaAbertura.id])
+        const [result] = await connection.execute(update, [valor_abertura || valorAnteriorDoCaixa, valor_abertura ? 0 : valorAnteriorDoCaixa, ultimaAbertura.id])
 
         if (result.affectedRows === 1) {
             const [items] = await connection.execute("SELECT * FROM abertura_caixa WHERE id = ?", [ultimaAbertura.id])
@@ -90,7 +98,7 @@ const abrirCaixa = async (body) => {
         id_colaborator,
         dataAbertura,
         horaAbertura,
-        valorAnteriorDoCaixa
+        valor_abertura || valorAnteriorDoCaixa
     ]
 
     await connection.execute(query, values)

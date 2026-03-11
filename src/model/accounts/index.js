@@ -7,6 +7,14 @@ const getAccounts = async () => {
     return items
 }
 
+const getAccountsByParkingId = async (id) => {
+
+    const query = `SELECT * FROM accounts WHERE id_establishment = ?`
+
+    const [items] = await connection.execute(query, [id])
+    return items
+}
+
 const createAccount = async (accounts) => {
     const { 
         category, 
@@ -48,8 +56,8 @@ const createAccount = async (accounts) => {
 
     const [result] = await connection.execute(query, values)
 
-    if(result.affectedRows === 1) {
-        if(category === "Aporte") {
+    if (result.affectedRows === 1) {
+        if (category === "Aporte") {
             const query = `
                 INSERT INTO aportes(
                     id_establishment,
@@ -66,7 +74,7 @@ const createAccount = async (accounts) => {
             return await connection.execute(query, values)
         }
 
-        if(category === "Retirada") {
+        if (category === "Retirada") {
             const query = `
                 INSERT INTO retiradas(
                     id_establishment,
@@ -135,6 +143,7 @@ const deleteAccount = async (id) => {
 
 module.exports = {
     getAccounts,
+    getAccountsByParkingId,
     createAccount,
     updateAccount,
     deleteAccount

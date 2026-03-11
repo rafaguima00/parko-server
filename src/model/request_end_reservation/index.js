@@ -1,7 +1,7 @@
 const connection = require("../model")
 
 const getAllRequest = async (id) => {
-    if(id) {
+    if (id) {
         const query = `
             SELECT 
                 r.*,
@@ -54,7 +54,7 @@ const createRequest = async (body) => {
 
 const updateReq = async (body) => {
 
-    for(const updateRequest of body) {
+    for (const updateRequest of body) {
         
         const { id } = updateRequest
 

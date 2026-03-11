@@ -2,6 +2,13 @@ const model = require("../../model/accounts")
 
 const getAccounts = async (req, res) => {
     const getAll = await model.getAccounts()
+    
+    res.status(200).json(getAll)
+}
+
+const getAccountsByParkingId = async (req, res) => {
+    const getAll = await model.getAccountsByParkingId(req.params.id)
+
     res.status(200).json(getAll)
 }
 
@@ -26,6 +33,7 @@ const deleteAccount = async (req, res) => {
 
 module.exports = {
     getAccounts,
+    getAccountsByParkingId,
     postAccounts,
     putAccounts,
     deleteAccount

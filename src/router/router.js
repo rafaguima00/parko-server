@@ -144,6 +144,7 @@ const routes = [
 
     // Registro de Contas
     { path: "/accounts", method: "get", handler: controllers.accounts.getAccounts },
+    { path: "/accounts/:id", method: "get", handler: controllers.accounts.getAccountsByParkingId },
     { path: "/accounts", method: "post", handler: controllers.accounts.postAccounts },
     { path: "/accounts/:id", method: "put", handler: controllers.accounts.putAccounts },
     { path: "/accounts/:id", method: "delete", handler: controllers.accounts.deleteAccount },
