@@ -1,6 +1,6 @@
 const connection = require("../model")
 
-const getDebts = async () => {
+const getDebts = async (id) => {
     const query = `
         SELECT 
             d.*,
@@ -15,7 +15,7 @@ const getDebts = async () => {
         INNER JOIN status_debts s ON s.id = d.status
     `
 
-    const [items] = await connection.execute(query)
+    const [items] = await connection.execute(query, [id])
     return items
 }
 
@@ -31,7 +31,7 @@ const getDebtsByOwnerId = async (id) => {
         INNER JOIN users u ON u.id = d.id_costumer
         INNER JOIN establishments e ON e.id = d.id_establishment
         INNER JOIN status_debts s ON s.id = d.status
-        WHERE id_establishment = ?
+        WHERE d.status = 1 AND d.id_costumer = ?
     `
     const [items] = await connection.execute(query, [id])
     return items

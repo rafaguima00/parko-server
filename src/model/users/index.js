@@ -23,9 +23,10 @@ const postUsers = async (body, hashedPassword) => {
             rg,
             tel, 
             data_nasc, 
-            created_at
+            created_at,
+            status
         ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, "Pendente"
         )
     `
     const values = [name_user, hashedPassword, email, cpf, rg, tel, data_nasc, createdAt]
@@ -80,10 +81,51 @@ const updateUsers = async (body, id) => {
     await connection.execute(query, values)
 }
 
+const createToken = async (id, token) => {
+    const query = `
+        INSERT INTO token_user (
+            id_user, token
+        ) VALUES(
+            ?, ?
+        );
+    `
+    const values = [id, token]
+
+    await connection.execute(query, values)
+}
+
+const validateToken = async (token) => {
+    const query = `
+        SELECT * FROM token_user WHERE token = ?
+    `
+    
+    const [items] = await connection.execute(query, [token])
+
+    if (items.length > 0) {
+        const query = `
+            UPDATE users
+            SET status = "Ativo" 
+            WHERE id = ?
+        `
+
+        const result = await connection.execute(query, [items[0].id_user])
+        
+        if (result) {
+            const query = `DELETE FROM token_user WHERE token = ?`
+
+            await connection.execute(query, [token])
+        }
+    }
+
+    return items
+}
+
 module.exports = {
     getUsers,
     getUserById,
     postUsers,
     deleteUsers,
-    updateUsers
+    updateUsers,
+    createToken,
+    validateToken
 }

@@ -22,7 +22,7 @@ const getAllRequest = async (id) => {
             INNER JOIN reservations s ON s.id = r.id_reservation
             INNER JOIN vehicles v ON v.id = r.id_vehicle
             INNER JOIN users u ON u.id = r.id_customer
-            WHERE r.id_establishment = ?
+            WHERE r.id_establishment = ? AND r.notified = 0
         `
     
         const [items] = await connection.execute(query, [id])

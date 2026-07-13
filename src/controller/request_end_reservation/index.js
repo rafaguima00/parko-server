@@ -14,6 +14,7 @@ const postRequest = async (req, res) => {
 
 const updateRequest = async (req, res) => {
     await model.updateReq(req.body)
+    
     res.status(204).json({})
 }
 

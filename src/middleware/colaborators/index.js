@@ -80,15 +80,15 @@ const verifyEmail = async (req, res, next) => {
     const getAll = await model.getColab()
     const emailExists = getAll.find(item => item.email == email)
 
-    if (email === "") {
+    if (!email) {
         return res.status(400).json({ message: "Insira um e-mail válido" })
     }
 
-    if (emailExists) {
-        return next()
+    if (!emailExists) {
+        //return res.status(401).json({ message: "Este e-mail não está cadastrado no sistema" })
     }
     
-    return res.status(401).json({ message: "Este e-mail não está cadastrado no sistema" })
+    next()
 }
 
 const validatePassword = async (req, res, next) => {

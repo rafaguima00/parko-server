@@ -22,7 +22,7 @@ const postColaborators = async (req, res) => {
 }
 
 const loginColaborators = async (req, res) => {
-    if (req.body.email === "" || req.body.password === "") {
+    if (!req.body.email || !req.body.password) {
         return res.status(400).json({ message: "Preencha o campo vazio" })
     }
 
@@ -60,6 +60,7 @@ const updateColaborators = async (req, res) => {
 
 const sendEmail = async (req, res) => {
     const { email } = req.body
+
     const textEmail = `
         <div>
             <p>Clique aqui para recuperar a senha</p>
@@ -77,17 +78,19 @@ const sendEmail = async (req, res) => {
     })
 
     transport.sendMail({
-        from: "Parko <suporte@demomailtrap.com>",
+        from: "Parko <suporte@parkoapp.com.br>",
         to: email,
         subject: "Reset de senha - Parko app",
         html: textEmail
     })
-    .then(() => {
-        return res.status(200).json({ message: "E-mail enviado" })
-    })
-    .catch(e => {
-        return res.status(400).json({ message: "Erro ao enviar e-mail", error: e.message })
-    })
+        .then(() => {
+            return res.status(200).json({ 
+                message: "Enviamos o link de alteração para o seu e-mail, verifique sua caixa de entrada!" 
+            })
+        })
+        .catch(error => {
+            return res.status(400).json({ message: error.response })
+        })
 }
 
 const forgotPassword = async (req, res) => {

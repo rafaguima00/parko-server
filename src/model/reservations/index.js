@@ -283,7 +283,8 @@ const putReservation = async (body, id) => {
 
         if (status === 4) {
             const updateQuery = `
-                UPDATE establishments
+                UPDATE 
+                    establishments
                 SET vagas_ocupadas = vagas_ocupadas - 1
                 WHERE id = ?
             `

@@ -1,17 +1,45 @@
 const connection = require("../model")
 
 const selectPayment = async (id) => {
-
     const query = `
         SELECT * FROM payments WHERE id_establishment = ?
     `
     const [items] = await connection.execute(query, [id])
+
     return items
+}
+
+const searchPayment = async (id) => {
+    const query = `
+            SELECT * FROM payments WHERE id_reservation = ?
+        `
+    const [items] = await connection.execute(query, [id])
+
+    return items
+}
+
+const alterPayment = async (body) => {
+
+    const { value_refunded, id_payment, id_reservation } = body
+
+    const query = `
+        UPDATE payments SET status = "refunded", value_refunded = ? WHERE id_payment = ?
+    `
+
+    const paymentUpdated = await connection.execute(query, [value_refunded, id_payment])
+
+    if (paymentUpdated[0].affectedRows === 1) {
+        const query = `
+            UPDATE reservations SET status_reservation = 5 WHERE id = ?
+        `
+
+        await connection.execute(query, [id_reservation])
+    }
 }
 
 const createPayment = async (body) => {
 
-    for(const payment of body){
+    for (const payment of body){
 
         const { 
             id_customer, 
@@ -75,5 +103,7 @@ const createPayment = async (body) => {
 
 module.exports = {
     selectPayment,
-    createPayment
+    createPayment,
+    searchPayment,
+    alterPayment
 }

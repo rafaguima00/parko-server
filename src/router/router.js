@@ -42,6 +42,10 @@ const routes = [
     { path: "/create_payment", method: "post", handler: controllers.pagamento.pagamento },
     { path: "/payment-on-db", method: "post", handler: controllers.pagamento.savePaymentOnDB },
     { path: "/payment/:id", method: "get", handler: controllers.pagamento.getPayment },
+    { path: "/payment/:id/refunds", method: "post", handler: controllers.pagamento.refunds },
+    { path: "/get-payment/:id", method: "get", handler: controllers.pagamento.getPaymentById },
+    { path: "/search-payment/:id", method: "get", handler: controllers.pagamento.searchPayment },
+    { path: "/update-payment-on-db", method: "put", handler: controllers.pagamento.updatePayment },
 
     //  Ajuda
     { path: "/faq", method: "get", handler: controllers.faq.getFaq },
@@ -116,6 +120,8 @@ const routes = [
     { path: "/users/:id", method: "delete", handler: controllers.users.deleteUsers },
     { path: "/users/:id", method: "put", handler: controllers.users.putUsers },
     { path: "/users/login", method: "post", handler: controllers.users.loginUsers },
+    { path: "/users/email-validator", method: "post", handler: controllers.users.sendEmail },
+    { path: "/confirmar/:token", method: "get", handler: controllers.users.validateToken },
 
     // Favoritos
     { path: "/favorites/:id", method: "get", handler: controllers.favorites.getFavorites },
@@ -123,7 +129,6 @@ const routes = [
     { path: "/favorites", method: "delete", handler: controllers.favorites.deleteFavorites },
 
     // Dívidas
-    { path: "/debts", method: "get", handler: controllers.debts.getDebts },
     { path: "/debts/:id", method: "get", handler: controllers.debts.getSelectedDebt },
     { path: "/debts", method: "post", handler: controllers.debts.postDebts },
     { path: "/debts/:id", method: "delete", handler: controllers.debts.deleteDebts },
@@ -162,7 +167,7 @@ const routes = [
     { path: "/occurrence/:id", method: "delete", handler: controllers.occurrence.deleteOccurrence },
 
     // Aportes
-    { path: "/aportes", method: "get", handler: controllers.aportes.getAportes },
+    { path: "/aportes/:id", method: "get", handler: controllers.aportes.getAportes },
     { path: "/aportes", method: "post", middleware: middlewares.aportes.validarAporte, handler: controllers.aportes.postAportes },
     { path: "/aportes/:id", method: "delete", handler: controllers.aportes.deleteAportes },
 

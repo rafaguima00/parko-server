@@ -1,6 +1,6 @@
 const connection = require("../model")
 
-const getAportes = async () => {
+const getAportes = async (id) => {
     const query = `
         SELECT 
            id,
@@ -9,9 +9,9 @@ const getAportes = async () => {
            value,
            created_at,
            description
-        FROM aportes
+        FROM aportes WHERE id_establishment = ?
     `
-    const [items] = await connection.execute(query)
+    const [items] = await connection.execute(query, [id])
     return items
 }
 
@@ -33,7 +33,7 @@ const postAportes = async (body) => {
 
     const [result] = await connection.execute(query, values)
 
-    if(result.affectedRows === 1) {
+    if (result.affectedRows === 1) {
         const query = `
             INSERT INTO accounts(
                 category, 
