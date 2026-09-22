@@ -1,7 +1,6 @@
 const express = require("express")
 const router = express.Router()
 
-// controllers
 const controllers = {
     colab: require("../controller/colaborators"),
     estab: require("../controller/establishments"),
@@ -27,13 +26,16 @@ const controllers = {
     privacy: require("../controller/privacy-policy")
 }
 
-// middlewares
 const middlewares = {
     colab: require("../middleware/colaborators"),
     reserv: require("../middleware/reservations"),
     users: require("../middleware/users"),
     aportes: require("../middleware/aportes"),
     retiradas: require("../middleware/retiradas")
+}
+
+const services = {
+    spedy: require("../services/spedyOrderService")
 }
 
 // Rotas
@@ -46,6 +48,9 @@ const routes = [
     { path: "/get-payment/:id", method: "get", handler: controllers.pagamento.getPaymentById },
     { path: "/search-payment/:id", method: "get", handler: controllers.pagamento.searchPayment },
     { path: "/update-payment-on-db", method: "put", handler: controllers.pagamento.updatePayment },
+
+    // NFS-e (Nota fiscal eletrônica)
+    { path: "/criar-venda-spedy", method: "post", handler: services.spedy.criarVendaSpedy },
 
     //  Ajuda
     { path: "/faq", method: "get", handler: controllers.faq.getFaq },

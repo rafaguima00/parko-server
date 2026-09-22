@@ -15,7 +15,10 @@ const pagamento = async (req, res) => {
         email,
         name,
         surname,
-        cpf
+        cpf,
+        phone,
+        id,
+        title
     } = req.body
 
     const idempotencyKey = uuidv4()
@@ -38,7 +41,20 @@ const pagamento = async (req, res) => {
             }
         },
         issuer_id: issuer_id,
-        statement_descriptor: "PARKO_ESTACIONAMENTOS"
+        statement_descriptor: "PARKO",
+        additional_info: {
+            items: [{
+                id: String(id),
+                title: `Vaga: ${title}`,
+                quantity: 1,
+                unit_price: transaction_amount
+            }],
+            payer: {
+                phone: { area_code: "", number: phone },
+                first_name: name,
+                last_name: surname
+            }
+        }
     }
 
     try {

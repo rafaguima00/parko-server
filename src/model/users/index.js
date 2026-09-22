@@ -44,17 +44,17 @@ const deleteUsers = async (id) => {
     const deleteReservation = await connection.execute(query, [id])
 
     // 2- deletar os débitos do usuário
-    if(deleteReservation) {
+    if (deleteReservation) {
         const query = "DELETE FROM debts WHERE id_costumer = ?"
         const deleteDebt = await connection.execute(query, [id])
 
         // 3- deletar veículos do usuário
-        if(deleteDebt) {
+        if (deleteDebt) {
             const query = "DELETE FROM vehicles WHERE id_costumer = ?"
             const deleteVehicle = await connection.execute(query, [id])
     
             // 4- Por último, deletar o usuário
-            if(deleteVehicle) {
+            if (deleteVehicle) {
                 const query = "DELETE FROM users WHERE id = ?"
                 await connection.execute(query, [id])
             }

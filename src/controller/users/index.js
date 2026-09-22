@@ -122,7 +122,7 @@ const sendEmail = async (req, res) => {
             port: 587,
             auth: {
                 user: "api",
-                pass: process.env.API_TOKEN
+                pass: process.env.API_TOKEN_MAILTRAP
             }
         })
 
